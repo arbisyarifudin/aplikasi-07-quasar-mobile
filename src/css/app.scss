@@ -1,1 +1,289 @@
 // app global css in SCSS form
+
+// Import style
+@import "style.typography.scss";
+
+// Import font
+@import url('https://fonts.googleapis.com/css?family=Montserrat:200,300,400,500,600,700,800,900&display=swap');
+
+html,
+body {
+  font-family: Montserrat, sans-serif;
+}
+
+.link {
+  color: $primary;
+  text-decoration: none;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+.underline {
+  text-decoration: underline;
+}
+
+.q-field {
+  &__control {
+    height: 45px;
+  }
+
+  &__marginal {
+    height: 45px;
+  }
+
+  &--outlined {
+    .q-field {
+      &__control {
+        border-radius: 8px;
+      }
+    }
+  }
+}
+
+.q-btn {
+  border-radius: 8px;
+
+  &--fab {
+    border-radius: 50%;
+  }
+}
+
+.q-fab {
+  &__actions {
+    margin-bottom: 20px;
+  }
+}
+
+/* LAYOUT */
+.q-layout {
+  // background-color: #f9f9f9;
+}
+
+/* PAGE */
+
+.q-page {
+  &.main {
+    // padding: 40px 40px;
+    padding: 10px 20px;
+    padding-top: 20px;
+  }
+}
+
+/* DISPLAY */
+.inline {
+  display: inline !important;
+}
+
+.flex {
+  display: flex !important;
+}
+
+/* SIDEBAR */
+.sidebar-menu {
+  // background: #FFFFFF;
+  box-shadow: 0px 4px 32px rgba(26, 26, 26, 0.12);
+  border-radius: 0px 24px 24px 0px;
+
+  .menu-logo {
+    // padding: 16px 40px;
+    max-width: 100%;
+    width: 120px;
+    height: 120px;
+    object-fit: contain;
+  }
+
+  .menu-list {
+    width: 100%;
+  }
+}
+
+.sidebar-menu.q-drawer {
+  &__content {
+
+    // padding-left: 15px;
+    // padding-right: 15px;
+    // background-color: $primary;
+    // color: $white;
+    .q-item {
+      padding: 16px 40px;
+
+      &__section {
+
+        // height: 56px;
+        &--main {
+          .q-item__label {
+            // color: $white;
+          }
+        }
+
+        &--avatar {
+          min-width: auto;
+        }
+      }
+
+
+      &.q-router-link--exact-active {
+        background-color: $primary;
+        // color: $white;
+        color: $dark;
+
+        .q-item__section {
+          &--main {
+            .q-item__label {
+              // color: $white;
+              color: $dark;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+
+/* CARD */
+
+.q-card {
+  border-radius: 8px;
+  box-shadow: 0px 4px 32px rgba(168, 168, 168, 0.1);
+}
+
+/* MENU */
+.q-menu {
+  border-radius: 8px;
+  box-shadow: 0px 4px 32px rgba(124, 124, 124, 0.1);
+}
+
+/* TABLE */
+.q-table {
+  tbody {
+    tr {
+      td {
+        padding: 16px 20px;
+      }
+    }
+  }
+}
+
+/* BADGE */
+
+.badge-status {
+  border-radius: 8px;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  padding: 8px 12px;
+  gap: 10px;
+  font-size: 12px;
+  text-align: center;
+  min-width: 50px;
+  height: 30px;
+  font-weight: 500;
+
+  &--positive {
+    background-color: $status-positive-secondary;
+    color: $status-positive;
+  }
+
+  &--warning {
+    background-color: $status-warning-secondary;
+    color: $status-warning;
+  }
+
+  &--negative {
+    background-color: $status-negative-secondary;
+    color: $status-negative;
+  }
+
+  &--info {
+    background-color: $status-info-secondary;
+    color: $status-info;
+  }
+
+  &--primary {
+    background-color: $status-primary-secondary;
+    color: $status-primary;
+  }
+
+  &--secondary {
+    background-color: $status-secondary-secondary;
+    color: $status-secondary;
+  }
+
+  &--dark {
+    background-color: $status-dark-secondary;
+    color: $status-dark;
+  }
+}
+
+.alert {
+  border-radius: 8px;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  padding: 8px 12px;
+  gap: 10px;
+  font-size: 12px;
+  // text-align: center;
+  min-width: 50px;
+  // height: 30px;
+  font-weight: 500;
+
+  &--positive {
+    background-color: $status-positive-secondary;
+    color: $status-positive;
+  }
+
+  &--warning {
+    background-color: $status-warning-secondary;
+    color: $status-warning;
+  }
+
+  &--negative {
+    background-color: $status-negative-secondary;
+    color: $status-negative;
+  }
+
+  &--info {
+    background-color: $status-info-secondary;
+    color: $status-info;
+  }
+
+  &--primary {
+    background-color: $status-primary-secondary;
+    color: $status-primary;
+  }
+
+  &--secondary {
+    background-color: $status-secondary-secondary;
+    color: $status-secondary;
+  }
+
+  &--dark {
+    background-color: $status-dark-secondary;
+    color: $status-dark;
+  }
+}
+
+
+body {
+  &.body--dark {
+    .q-field--error .q-field__bottom {
+      color: $warning;
+    }
+
+    .q-field__control.text-negative {
+      &::after {
+        color: $warning;
+      }
+
+      .q-icon.text-negative {
+        color: $warning !important;
+      }
+    }
+  }
+}

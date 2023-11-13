@@ -2,6 +2,11 @@ import { route } from 'quasar/wrappers'
 import { createRouter, createMemoryHistory, createWebHistory, createWebHashHistory } from 'vue-router'
 import routes from './routes'
 
+import { useMeta, useQuasar } from 'quasar'
+import middlewarePipeline from './middleware-pipeline'
+
+import { useGlobalStore } from 'src/stores/global-store'
+
 /*
  * If not building with SSR mode, you can
  * directly export the Router instantiation;
@@ -24,6 +29,42 @@ export default route(function (/* { store, ssrContext } */) {
     // quasar.conf.js -> build -> vueRouterMode
     // quasar.conf.js -> build -> publicPath
     history: createHistory(process.env.VUE_ROUTER_BASE)
+  })
+
+  // eslint-disable-next-line no-unused-vars
+  const globalStore = useGlobalStore()
+
+  // Add a navigation guard that executes before any navigation.
+  Router.beforeEach((to, from, next) => {
+    // globalStore.setLoadingState(true)
+
+    const $q = useQuasar()
+
+    // set to dark mode
+    $q.dark.set(true)
+
+    // use quasar meta
+    useMeta({
+      // sets document title
+      title: to.meta.title || 'Selamat datang',
+      // optional; sets final title as "Index Page - My Website", useful for multiple level meta
+      titleTemplate: (title) => `${title} - Aplikasi07`
+    })
+
+    // run the middleware(s)
+    if (!to.meta.middleware) return next()
+    const middlewares = Array.isArray(to.meta.middleware)
+      ? to.meta.middleware
+      : [to.meta.middleware]
+    const context = { to, from, next }
+    return middlewares[0]({
+      ...context,
+      next: middlewarePipeline(context, middlewares, 1)
+    })
+  })
+
+  Router.afterEach((to, from) => {
+    // globalStore.setLoadingState(false)
   })
 
   return Router

@@ -1,0 +1,117 @@
+
+
+.text {
+
+  // Font size
+
+  &-h1 {
+    font-size: 36px;
+    line-height: 54px;
+  }
+
+  &-h2 {
+    font-size: 28px;
+    line-height: 42px;
+  }
+
+  &-h3 {
+    font-size: 24px;
+    line-height: 36px;
+  }
+
+  &-h4 {
+    font-size: 20px;
+    line-height: 30px;
+  }
+
+  &-h5 {
+    font-size: 16px;
+    line-height: 24px;
+  }
+
+  &-h6 {
+    font-size: 14px;
+    line-height: 21px;
+  }
+
+  &-small {
+    font-size: 12px;
+    line-height: 18px;
+  }
+
+  // Font weight
+
+  &-bold {
+    font-weight: 700 !important;
+  }
+
+  &-semibold {
+    font-weight: 600 !important;
+  }
+
+  &-medium {
+    font-weight: 500 !important;
+  }
+
+  &-regular {
+    font-weight: 400 !important;
+  }
+
+  &-light {
+    font-weight: 300 !important;
+  }
+
+  &-thin {
+    font-weight: 200 !important;
+  }
+
+  // decoration
+  &-underline {
+    text-decoration: underline;
+  }
+
+  // Font color
+
+  &-primary {
+    color: $primary !important;
+
+    &--outlined {
+      // color: $primary !important;
+      -webkit-text-stroke: 1px $primary;
+      text-shadow: 0px 2px 4px red;
+    }
+  }
+
+  &-secondary {
+    color: $secondary !important;
+  }
+}
+
+// Background color
+.bg {
+
+  &-primary {
+    background-color: $primary;
+  }
+
+  &-secondary {
+    background-color: $secondary;
+  }
+
+}
+
+// Box shadow
+.shadow {
+  &-sm {
+    box-shadow: 0px 2px 8px rgba(21, 21, 21, 0.12);
+  }
+
+  &-md {
+    box-shadow: 0px 4px 32px rgba(21, 21, 21, 0.12);
+  }
+
+  &-lg {
+    box-shadow: 0px 8px 64px rgba(21, 21, 21, 0.12);
+  }
+
+}

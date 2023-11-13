@@ -94,6 +94,11 @@
     "@nodelib/fs.scandir" "2.1.5"
     fastq "^1.6.0"
 
+"@phosphor-icons/vue@^2.1.6":
+  version "2.1.6"
+  resolved "https://registry.yarnpkg.com/@phosphor-icons/vue/-/vue-2.1.6.tgz#90c999d54ffe2fcb0ea683120b49269739c9decc"
+  integrity sha512-j4iVvNT4JbDR2udIVfakKZHd14i3jCvO4b24OC0W/1rasftU8qVg1Tnb3QDwAT0teNU+UxvaM+kCWxfGHC2dUg==
+
 "@quasar/app-vite@^1.3.0":
   version "1.6.2"
   resolved "https://registry.yarnpkg.com/@quasar/app-vite/-/app-vite-1.6.2.tgz#6aae131511dfdffafcaa4d87af31e40e53a67fce"

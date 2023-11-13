@@ -10,7 +10,14 @@
 
 const { configure } = require('quasar/wrappers')
 
-module.exports = configure(function (/* ctx */) {
+const deployMode = process.env.DEPLOY_MODE ?? 'development' // development | production
+
+const apiURLDevelopment = 'http://localhost:8000/api/'
+const apiURLProduction = deployMode === 'development' ? 'https://api-dev.domain.id/' : 'https://api.domain.id/'
+
+module.exports = configure(function (ctx) {
+  console.log('DEV MODE', ctx.dev)
+  console.log('DEPLOY MODE:', deployMode)
   return {
     eslint: {
       // fix: true,
@@ -28,8 +35,8 @@ module.exports = configure(function (/* ctx */) {
     // --> boot files are part of "main.js"
     // https://v2.quasar.dev/quasar-cli-vite/boot-files
     boot: [
-
-      'axios'
+      'axios',
+      'ph-icons'
     ],
 
     // https://v2.quasar.dev/quasar-cli-vite/quasar-config-js#css
@@ -41,14 +48,15 @@ module.exports = configure(function (/* ctx */) {
     extras: [
       // 'ionicons-v4',
       // 'mdi-v5',
-      // 'fontawesome-v6',
+      'fontawesome-v6',
       // 'eva-icons',
       // 'themify',
       // 'line-awesome',
       // 'roboto-font-latin-ext', // this or either 'roboto-font', NEVER both!
 
       'roboto-font', // optional, you are not bound to it
-      'material-icons' // optional, you are not bound to it
+      'material-icons', // optional, you are not bound to it
+      'material-icons-outlined'
     ],
 
     // Full list of options: https://v2.quasar.dev/quasar-cli-vite/quasar-config-js#build
@@ -58,7 +66,7 @@ module.exports = configure(function (/* ctx */) {
         node: 'node16'
       },
 
-      vueRouterMode: 'hash' // available values: 'hash', 'history'
+      vueRouterMode: 'hash', // available values: 'hash', 'history'
       // vueRouterBase,
       // vueDevtools,
       // vueOptionsAPI: false,
@@ -67,7 +75,9 @@ module.exports = configure(function (/* ctx */) {
 
       // publicPath: '/',
       // analyze: true,
-      // env: {},
+      env: {
+        API_URL: deployMode === 'development' ? apiURLDevelopment : apiURLProduction
+      }
       // rawDefine: {}
       // ignorePublicFolder: true,
       // minify: false,
@@ -85,6 +95,7 @@ module.exports = configure(function (/* ctx */) {
     // Full list of options: https://v2.quasar.dev/quasar-cli-vite/quasar-config-js#devServer
     devServer: {
       // https: true
+      port: 8001,
       open: true // opens browser window automatically
     },
 
@@ -103,7 +114,12 @@ module.exports = configure(function (/* ctx */) {
       // directives: [],
 
       // Quasar plugins
-      plugins: []
+      plugins: [
+        'Notify',
+        // 'Loading',
+        'Dialog',
+        'Loading'
+      ]
     },
 
     // animations: 'all', // --- includes all animations

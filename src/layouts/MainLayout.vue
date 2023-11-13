@@ -1,7 +1,7 @@
 <template>
   <q-layout view="lHh Lpr lFf">
-    <q-header elevated>
-      <q-toolbar>
+    <q-header elevated v-if="$q.screen.lt.md">
+      <q-toolbar class="text-dark hidden">
         <q-btn
           flat
           dense
@@ -11,106 +11,75 @@
           @click="toggleLeftDrawer"
         />
 
-        <q-toolbar-title>
-          Quasar App
-        </q-toolbar-title>
+        <q-toolbar-title> Aplikasi07 </q-toolbar-title>
 
-        <div>Quasar v{{ $q.version }}</div>
+        <!-- <div>Quasar v{{ $q.version }}</div> -->
       </q-toolbar>
+
+      <div class="q-py-sm header-logo">
+        <q-img src="~/assets/logo.png" width="30px" fit="contain"></q-img>
+        <div class="text-bold text-dark q-ml-sm">Aplikasi07</div>
+      </div>
+
     </q-header>
 
-    <q-drawer
-      v-model="leftDrawerOpen"
-      show-if-above
-      bordered
-    >
-      <q-list>
-        <q-item-label
-          header
-        >
-          Essential Links
-        </q-item-label>
-
-        <EssentialLink
-          v-for="link in essentialLinks"
-          :key="link.title"
-          v-bind="link"
-        />
-      </q-list>
-    </q-drawer>
+    <SidebarMenu :open="sidebarOpen" />
 
     <q-page-container>
-      <router-view />
+      <router-view v-slot="{ Component }">
+        <keep-alive :exclude="[]">
+          <component :is="Component" />
+        </keep-alive>
+      </router-view>
+      <q-page-sticky position="bottom-right" :offset="[18, 18]">
+        <q-fab
+          v-model="fabRight"
+          vertical-actions-align="right"
+          color="primary"
+          text-color="dark"
+          icon="add"
+          direction="up"
+        >
+        <q-fab-action color="primary" text-color="dark" @click="onClick" label="Input Hasil & C1" />
+        <q-fab-action color="primary" text-color="dark" @click="onClick" label="Input Saksi Pemilu" />
+        <q-fab-action color="primary" text-color="dark" @click="onClick" label="Input Konstituen" />
+        </q-fab>
+      </q-page-sticky>
     </q-page-container>
+
+    <BottomMenu v-if="$q.screen.lt.md" :items="[]"/>
   </q-layout>
 </template>
 
-<script>
-import { defineComponent, ref } from 'vue'
-import EssentialLink from 'components/EssentialLink.vue'
+<script setup>
+import { ref } from 'vue'
 
-const linksList = [
-  {
-    title: 'Docs',
-    caption: 'quasar.dev',
-    icon: 'school',
-    link: 'https://quasar.dev'
-  },
-  {
-    title: 'Github',
-    caption: 'github.com/quasarframework',
-    icon: 'code',
-    link: 'https://github.com/quasarframework'
-  },
-  {
-    title: 'Discord Chat Channel',
-    caption: 'chat.quasar.dev',
-    icon: 'chat',
-    link: 'https://chat.quasar.dev'
-  },
-  {
-    title: 'Forum',
-    caption: 'forum.quasar.dev',
-    icon: 'record_voice_over',
-    link: 'https://forum.quasar.dev'
-  },
-  {
-    title: 'Twitter',
-    caption: '@quasarframework',
-    icon: 'rss_feed',
-    link: 'https://twitter.quasar.dev'
-  },
-  {
-    title: 'Facebook',
-    caption: '@QuasarFramework',
-    icon: 'public',
-    link: 'https://facebook.quasar.dev'
-  },
-  {
-    title: 'Quasar Awesome',
-    caption: 'Community Quasar projects',
-    icon: 'favorite',
-    link: 'https://awesome.quasar.dev'
-  }
-]
+import SidebarMenu from 'components/menu/SidebarMenu.vue'
+import BottomMenu from 'components/menu/BottomMenu.vue'
 
-export default defineComponent({
-  name: 'MainLayout',
+const sidebarOpen = ref(false)
+const toggleLeftDrawer = () => {
+  sidebarOpen.value = !sidebarOpen.value
+}
 
-  components: {
-    EssentialLink
-  },
+const fabRight = ref(false)
+const onClick = () => {
+  console.log('click')
+}
 
-  setup () {
-    const leftDrawerOpen = ref(false)
-
-    return {
-      essentialLinks: linksList,
-      leftDrawerOpen,
-      toggleLeftDrawer () {
-        leftDrawerOpen.value = !leftDrawerOpen.value
-      }
-    }
-  }
-})
 </script>
+
+<style lang="scss" scoped>
+.header-logo {
+  color: $dark;
+  border-bottom-left-radius: 10px;
+  border-bottom-right-radius: 10px;
+  box-shadow: 0 0 15px 0px #fefe5d47;
+  border: 1px solid $primary;
+  margin: 0 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+</style>
