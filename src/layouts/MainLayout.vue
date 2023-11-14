@@ -34,8 +34,8 @@
       <q-page-sticky position="bottom-right" :offset="[18, 18]">
         <q-fab v-if="fabRightWrapperShow" v-model="fabRightState" vertical-actions-align="right" color="primary"
           text-color="dark" icon="add" direction="up">
-          <q-fab-action color="primary" text-color="dark" label="Input Hasil & C1" />
-          <q-fab-action color="primary" text-color="dark" @click="onClick" label="Input Saksi Pemilu" />
+          <!-- <q-fab-action color="primary" text-color="dark" label="Input Hasil & C1" /> -->
+          <q-fab-action color="primary" text-color="dark" :to="{ name: 'TPS Create Page' }" label="Input TPS" />
           <q-fab-action color="primary" text-color="dark" :to="{ name: 'Constituent Create Page' }"
             label="Input Konstituen" />
         </q-fab>
@@ -63,9 +63,6 @@ const toggleLeftDrawer = () => {
 }
 
 const fabRightState = ref(false)
-const onClick = () => {
-  console.log('click')
-}
 
 const $q = useQuasar()
 const $router = useRouter()

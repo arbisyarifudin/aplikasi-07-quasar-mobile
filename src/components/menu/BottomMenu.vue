@@ -46,11 +46,12 @@ const items = ref([
     }
   },
   {
-    label: 'Pemilu',
-    icon: 'Pencil',
-    name: 'Election Page',
+    label: 'TPS',
+    icon: 'MapPinLine',
+    name: 'TPS Page',
     action: () => {
-      console.log('Pemilu')
+      console.log('TPS')
+      $router.push({ name: 'TPS Index Page' })
     }
   },
   {
@@ -73,8 +74,10 @@ const isActive = (name) => {
     case 'Constituent Edit Page':
       routeName = 'Constituent Page'
       break
-    case 'Election Page':
-      routeName = 'Election Page'
+    case 'TPS Index Page':
+    case 'TPS Create Page':
+    case 'TPS Edit Page':
+      routeName = 'TPS Page'
       break
     case 'Settings Page':
       routeName = 'Settings Page'

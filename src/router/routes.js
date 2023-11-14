@@ -90,6 +90,8 @@ const routes = [
         },
         component: () => import('pages/main/dashboard/IndexPage.vue')
       },
+
+      // CONSTITUENT
       {
         path: 'constituent',
         name: 'Constituent Index Page',
@@ -102,7 +104,7 @@ const routes = [
         path: 'constituent/select-area',
         name: 'Constituent Select Area Page',
         meta: {
-          title: 'Tambah Konstituen'
+          title: 'Pilih Wilayah Kerja'
         },
         component: () => import('pages/main/constituent/SelectAreaPage.vue')
       },
@@ -122,6 +124,49 @@ const routes = [
         },
         component: () => import('pages/main/constituent/EditPage.vue')
       },
+
+      // TPS
+      {
+        path: 'tps',
+        name: 'TPS Index Page',
+        meta: {
+          title: 'Daftar TPS'
+        },
+        component: () => import('pages/main/tps/IndexPage.vue')
+      },
+      {
+        path: 'tps/select-polling',
+        name: 'TPS Select Polling Page',
+        meta: {
+          title: 'Pilih Pemilihan Umum'
+        },
+        component: () => import('pages/main/tps/SelectPollingPage.vue')
+      },
+      {
+        path: 'tps/select-area',
+        name: 'TPS Select Area Page',
+        meta: {
+          title: 'Pilih Wilayah Kerja'
+        },
+        component: () => import('pages/main/tps/SelectAreaPage.vue')
+      },
+      {
+        path: 'tps/create',
+        name: 'TPS Create Page',
+        meta: {
+          title: 'Tambah TPS'
+        },
+        component: () => import('pages/main/tps/CreatePage.vue')
+      },
+      {
+        path: 'tps/edit/:id',
+        name: 'TPS Edit Page',
+        meta: {
+          title: 'Ubah TPS'
+        },
+        component: () => import('pages/main/tps/EditPage.vue')
+      },
+
       {
         path: 'setting',
         name: 'Setting Index Page',
