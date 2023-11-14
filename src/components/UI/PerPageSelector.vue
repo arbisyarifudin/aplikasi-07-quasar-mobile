@@ -1,6 +1,6 @@
 <template>
   <div class="flex items-center">
-    <span>Show</span>
+    <span v-if="$q.screen.gt.md">Show</span>
     <q-btn no-caps unelevated color="grey-3" class="text-grey-8 q-mx-md">
       <div class="flex items-center">
         <span class="q-mr-sm">{{ modelValue }}</span>
@@ -21,7 +21,7 @@
         </q-list>
       </q-menu>
     </q-btn>
-    <span>entries</span>
+    <span  v-if="$q.screen.gt.md">entries</span>
   </div>
 </template>
 

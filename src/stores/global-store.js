@@ -3,7 +3,8 @@ import { defineStore } from 'pinia'
 export const useGlobalStore = defineStore('globalStore', {
   state: () => ({
     loadingState: false,
-    loadingTitleState: 'Loading...'
+    loadingTitleState: 'Loading...',
+    selectedUserArea: null
   }),
   actions: {
     setLoadingState (payload) {
@@ -11,6 +12,10 @@ export const useGlobalStore = defineStore('globalStore', {
     },
     setLoadingTitleState (payload) {
       this.loadingTitleState = payload
+    },
+
+    setSelectedUserArea (payload) {
+      this.selectedUserArea = payload
     }
   }
 })

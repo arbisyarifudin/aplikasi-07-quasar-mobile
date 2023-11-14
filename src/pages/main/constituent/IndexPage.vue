@@ -1,89 +1,79 @@
 <template>
   <q-page class="main">
-    <div class="flex justify-between items-center q-mb-lg">
-      <div class="text-h2 text-semibold">Konstituen</div>
-    </div>
-    <q-card>
-      <div class="flex q-px-md q-py-md">
-        <div class="text-h4 text-semibold">Konstituen</div>
-        <q-space />
+    <q-card class="page-content">
+      <div class="page-content__header sticky q-px-md">
+        <div class="flex items-center justify-between ">
+          <div class="text-h6 text-semibold">Konstituen</div>
+          <q-input borderless dense debounce="300" v-model="search" placeholder="Cari">
+            <template v-slot:append>
+              <q-icon name="search" />
+            </template>
+          </q-input>
+        </div>
+        <q-separator />
+        <div class="flex q-mt-sm justify-end">
+          <div class="text-small">Total: {{ pagination.rowsNumber }}</div>
+        </div>
       </div>
-      <q-separator />
-      <q-table
-        ref="tableRef"
-        flat
-        :rows="rows"
-        :columns="columns"
-        row-key="uuid"
-        v-model:pagination="pagination"
-        :loading="loading"
-        :filter="search"
-        binary-state-sort
-        @request="onRequest"
-        hide-pagination
-        table-header-class="bg-primary text-dark"
-      >
-      <template v-slot:loading>
-          <div class="flex flex-center">
-            <q-spinner-dots size="30px" color="primary" />
+      <div class="page-content__body">
+        <q-table ref="tableRef" grid flat :rows="rows" :columns="columns" row-key="uuid" v-model:pagination="pagination"
+          :loading="loading" :filter="search" binary-state-sort @request="onRequest" hide-pagination
+          table-header-class="bg-primaryx text-darkx">
+          <!-- <template v-slot:top-left>
+          <div class="text-h6 text-semibold">Konstituen</div>
+        </template>
+        <template v-slot:top-right>
+          <q-input borderless dense debounce="300" v-model="search" placeholder="Cari">
+            <template v-slot:append>
+              <q-icon name="search" />
+            </template>
+          </q-input>
+        </template> -->
+          <template v-slot:item="props">
+            <div class="q-pa-xs col-xs-12 col-sm-6 col-md-4 q-mb-sm">
+              <q-card flat bordered>
+                <q-badge class="absolute top-left bg-grey-8" style="border-radius: 50%;">{{ props.rowIndex + 1
+                }}</q-badge>
+                <q-card-section class="column q-py-sm q-pl-lg">
+                  <div class="flex items-center justify-between">
+                    <div class="">
+                      <div class="text-h6 text-semibold">{{ props.row.name }}</div>
+                      <div class="text-small text-italic">NIK: {{ props.row.nik ?? '[tidak ada]' }}</div>
+                    </div>
+                    <div class="flex items-center">
+                      <q-btn dense flat color="info" :to="{ name: 'Constituent Edit Page', params: { id: props.row.id } }">
+                        <ph-icon name="PencilSimple" size="15"></ph-icon>
+                      </q-btn>
+                      <q-btn dense flat color="negative" class="q-ml-sm" @click="openDeleteDialog(props.row)">
+                        <ph-icon name="X" size="15"></ph-icon>
+                      </q-btn>
+                    </div>
+                  </div>
+                </q-card-section>
+                <q-separator />
+                <q-card-section class="q-py-sm  q-pl-lg">
+                  <div class="flex items-center justify-between text-small q-mb-sm">
+                    <div class="">No. HP:</div>
+                    <div class="text-small text-italic">{{ props.row.phone ?? '[tidak ada]' }}</div>
+                  </div>
+                  <div class="flex items-center justify-between text-small q-mb-sm">
+                    <div class="">Alamat:</div>
+                    <div class="text-small text-italic">{{ props.row.address ?? '[tidak ada]' }}</div>
+                  </div>
+                </q-card-section>
+              </q-card>
+            </div>
+          </template>
+        </q-table>
+        <div class="q-px-md q-py-md q-mb-md" v-if="pagesNumber > 1">
+          <div class="flex justify-center q-gutter-md">
+            <q-pagination v-model="pagination.page" :max="pagesNumber" :max-pages="1" direction-links color="grey-3"
+              text-color="grey-7" active-color="primary" active-text-color="dark" size="sm" gutter="10px" unelevated
+              @update:model-value="onPaginationChange" />
           </div>
-        </template>
-        <template v-slot:top="">
-          <q-toolbar class="q-px-none">
-            <PerPageSelector
-              v-model="pagination.rowsPerPage"
-              :options="rowsPerPageOptions"
-            />
-            <q-space />
-            <q-input
-              dense
-              outlined
-              debounce="300"
-              v-model="search"
-              @update:model-value="onSearch"
-              placeholder="Search"
-            >
-              <template v-slot:prepend>
-                <q-icon name="search" />
-              </template>
-            </q-input>
-          </q-toolbar>
-        </template>
-        <template v-slot:body-cell-index="props">
-          <q-td :props="props">
-            {{ props.rowIndex + 1 }}
-            <q-btn size="sm" color="accent" round dense @click="props.expand = !props.expand" :icon="props.expand ? 'remove' : 'add'" />
-          </q-td>
-        </template>
-        <template v-slot:body-cell-action="props">
-          <q-td :props="props">
-
-          </q-td>
-        </template>
-        <template v-slot:body="props">
-          <q-tr v-show="props.expand" :props="props">
-            <q-td colspan="100%">
-              <div class="text-left">This is expand slot for row above: {{ props.row.name }}.</div>
-            </q-td>
-          </q-tr>
-        </template>
-      </q-table>
-      <div class="q-pa-lg" v-if="pagesNumber > 1">
-        <div class="flex justify-center q-gutter-md">
-          <q-pagination
-            v-model="pagination.page"
-            :max="pagesNumber"
-            :max-pages="1"
-            direction-links
-            color="grey-3"
-            text-color="grey-7"
-            active-color="primary"
-            active-text-color="white"
-            size="md"
-            gutter="10px"
-            unelevated
-            @update:model-value="onPaginationChange"
-          />
+          <div class="text-center q-mt-sm" v-if="loading">
+            <q-spinner></q-spinner>
+          </div>
         </div>
       </div>
     </q-card>
@@ -91,10 +81,13 @@
 </template>
 
 <script setup>
-import PerPageSelector from 'src/components/UI/PerPageSelector.vue'
-
 import { ref, onMounted, computed, watch } from 'vue'
 import { getAPI } from 'src/services/fetch.service'
+import { useRoute, useRouter } from 'vue-router'
+import { useQuasar } from 'quasar'
+import { api } from 'src/boot/axios'
+import { showNotification } from 'src/utils/ui'
+import { useGlobalStore } from 'src/stores/global-store'
 
 const columns = [
   {
@@ -105,7 +98,7 @@ const columns = [
   },
   {
     name: 'name',
-    label: 'Konstituen Name',
+    label: 'Nama',
     field: 'name',
     align: 'left',
     sortable: true
@@ -147,7 +140,7 @@ const rows = ref([])
 const search = ref('')
 const loading = ref(false)
 const pagination = ref({
-  sortBy: 'createdAt',
+  sortBy: 'created_at',
   descending: false,
   page: 1,
   rowsPerPage: 5,
@@ -158,7 +151,7 @@ const pagesNumber = computed(() => {
   return Math.ceil(pagination.value.rowsNumber / pagination.value.rowsPerPage)
 })
 
-const rowsPerPageOptions = [5, 10, 15, 25]
+// const rowsPerPageOptions = [5, 10, 15, 25]
 
 // fetch data from server
 async function fetchFromServer ({
@@ -168,7 +161,7 @@ async function fetchFromServer ({
   page,
   rowsPerPage
 }) {
-  return await getAPI('/v1/coordinator/constituent', {
+  return await getAPI('/v1/constituent', {
     params: {
       keyword: filter,
       page,
@@ -178,6 +171,8 @@ async function fetchFromServer ({
     }
   })
     .then((res) => {
+      console.log('res', res)
+
       // update rowsCount with appropriate value
       pagination.value.rowsNumber = res.data.pagination.total
 
@@ -225,6 +220,7 @@ async function onRequest (props) {
   loading.value = false
 }
 
+// eslint-disable-next-line no-unused-vars
 const onSearch = (keyword) => {
   console.log('onSearch', keyword)
   tableRef.value.requestServerInteraction()
@@ -249,4 +245,90 @@ watch(
   }
 )
 
+// watch route query
+const $route = useRoute()
+const $router = useRouter()
+watch(
+  () => $route.query,
+  (val) => {
+    if (val && val.refresh === 'true') {
+      tableRef.value.requestServerInteraction()
+
+      // clear query
+      $router.replace({ query: {} })
+    }
+  }
+)
+
+/* ACTION */
+const $q = useQuasar()
+const globalStore = useGlobalStore()
+
+const deleteLoading = ref(false)
+
+const openDeleteDialog = (item) => {
+  console.log('openDeleteDialog', item)
+
+  $q.dialog({
+    title: 'Hapus Konstituen',
+    message: 'Apakah Anda yakin ingin menghapus konstituen ini?',
+    persistent: deleteLoading.value,
+    cancel: {
+      label: 'Tidak',
+      color: 'grey-7',
+      noCaps: true
+    },
+    ok: {
+      label: 'Ya',
+      noCaps: true,
+      loading: deleteLoading.value
+    },
+    color: 'negative'
+  }).onOk(() => {
+    deleteLoading.value = true
+    globalStore.setLoadingState(true)
+    globalStore.setLoadingTitleState('Menghapus...')
+    api.delete('v1/constituent/' + item.id)
+      .then(res => {
+        console.log('res', res)
+        showNotification('Konstituen berhasil dihapus', 'positive', 'check')
+
+        // remove item from rows
+        const index = rows.value.findIndex((row) => row.id === item.id)
+        rows.value.splice(index, 1)
+
+        tableRef.value.requestServerInteraction()
+      }).catch(_ => {
+        showNotification('Terjadi kesalahan. Coba lagi.', 'negative', 'error')
+      }).finally(() => {
+        deleteLoading.value = false
+        globalStore.setLoadingState(false)
+      })
+  })
+}
+
 </script>
+
+<style lang="scss" scoped>
+.main {
+  height: 0;
+}
+
+// page content with sticky header
+.page-content {
+  display: flex;
+  flex-direction: column;
+  height: 80vh;
+
+  &__header {
+    position: sticky;
+    top: 0;
+    z-index: 1;
+  }
+
+  &__body {
+    flex: 1;
+    overflow-y: auto;
+  }
+}
+</style>

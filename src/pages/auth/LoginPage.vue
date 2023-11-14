@@ -60,7 +60,7 @@
           <div class="auth-footer text-center full-width">
             <div class="text-small text-grey-5">&copy;2023 TRESNO Wibisono.</div>
           </div>
-        </div>s
+        </div>
       </div>
     </div>
   </div>

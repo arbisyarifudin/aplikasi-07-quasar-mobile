@@ -99,6 +99,30 @@ const routes = [
         component: () => import('pages/main/constituent/IndexPage.vue')
       },
       {
+        path: 'constituent/select-area',
+        name: 'Constituent Select Area Page',
+        meta: {
+          title: 'Tambah Konstituen'
+        },
+        component: () => import('pages/main/constituent/SelectAreaPage.vue')
+      },
+      {
+        path: 'constituent/create',
+        name: 'Constituent Create Page',
+        meta: {
+          title: 'Tambah Konstituen'
+        },
+        component: () => import('pages/main/constituent/CreatePage.vue')
+      },
+      {
+        path: 'constituent/edit/:id',
+        name: 'Constituent Edit Page',
+        meta: {
+          title: 'Ubah Konstituen'
+        },
+        component: () => import('pages/main/constituent/EditPage.vue')
+      },
+      {
         path: 'setting',
         name: 'Setting Index Page',
         meta: {

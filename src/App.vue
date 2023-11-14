@@ -2,7 +2,7 @@
   <router-view />
   <!-- loading screen -->
   <q-dialog v-model="loading" persistent>
-    <q-card class="bg-grey-8 text-white">
+    <q-card class="bg-dark text-white">
       <q-card-section class="row items-center">
         <q-spinner color="white" />
         <span class="q-ml-sm">{{ loadingTitle }}...</span>
