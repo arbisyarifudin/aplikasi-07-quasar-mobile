@@ -52,6 +52,14 @@
               dense :error="errorState?.address?.length > 0" :error-message="errorState?.address"
               @update:model-value="errorState.address = ''" hide-bottom-space />
           </div>
+          <div class="q-mb-sm">
+            <label for="constituent_note" class="text-small text-semibold q-mb-sm block">Keterangan <span
+                class="text-warning text-caption">[tidak wajib]</span></label>
+            <q-input id="constituent_note" name="constituent_note" type="textarea" autogrow
+              input-style="min-height: 80px" v-model="state.note" placeholder="Masukkan keterangan tambahan jika perlu" outlined
+              dense :error="errorState?.note?.length > 0" :error-message="errorState?.note"
+              @update:model-value="errorState.note = ''" hide-bottom-space />
+          </div>
         </q-card-section>
         <q-card-section class="q-py-none hidden">
           <div class="flex justify-center">
@@ -93,6 +101,7 @@ const state = ref({
   nik: '',
   phone: '',
   address: '',
+  note: '',
   user_area_id: ''
 })
 
@@ -101,6 +110,7 @@ const errorState = ref({
   nik: '',
   phone: '',
   address: '',
+  note: '',
   user_area_id: ''
 })
 
@@ -110,6 +120,7 @@ const resetForm = () => {
     nik: '',
     phone: '',
     address: '',
+    note: '',
     user_area_id: ''
   }
 
@@ -118,6 +129,7 @@ const resetForm = () => {
     nik: '',
     phone: '',
     address: '',
+    note: '',
     user_area_id: ''
   }
 }
@@ -134,6 +146,7 @@ const submitForm = () => {
     nik: '',
     phone: '',
     address: '',
+    note: '',
     user_area_id: ''
   }
 

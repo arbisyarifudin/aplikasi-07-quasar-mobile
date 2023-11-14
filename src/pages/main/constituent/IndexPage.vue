@@ -64,6 +64,11 @@
               </q-card>
             </div>
           </template>
+          <template v-slot:no-data>
+            <div class="flex justify-center full-width">
+              <div class="text-h6 text-center">Belum ada data. <br>Silahkan <router-link :to="{ name: 'Constituent Create Page' }" class="text-primary">input data</router-link> lebih dahulu.</div>
+            </div>
+          </template>
         </q-table>
         <div class="q-px-md q-py-md q-mb-md" v-if="pagesNumber > 1">
           <div class="flex justify-center q-gutter-md">
