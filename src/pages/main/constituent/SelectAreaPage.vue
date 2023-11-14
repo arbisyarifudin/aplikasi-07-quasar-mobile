@@ -52,7 +52,13 @@ const selectedUserArea = computed(() => globalStore.selectedUserArea)
 const selectArea = async (item) => {
   globalStore.setSelectedUserArea(item)
   LocalStorage.set('app_selected_user_area', item)
-  $router.push({ name: 'Constituent Create Page' })
+
+  const routeParamsId = $router.currentRoute.value.query?.id
+  if (routeParamsId) {
+    $router.push({ name: 'Constituent Edit Page', params: { id: routeParamsId }, query: { area_id: item.id } })
+  } else {
+    $router.push({ name: 'Constituent Create Page' })
+  }
 }
 
 /*  */
