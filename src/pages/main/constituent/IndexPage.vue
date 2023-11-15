@@ -38,7 +38,8 @@
                   <div class="flex items-center justify-between">
                     <div class="">
                       <div class="text-h6 text-semibold">{{ props.row.name }}</div>
-                      <div class="text-small text-italic">NIK: {{ props.row.nik ?? '[tidak ada]' }}</div>
+                      <!-- <div class="text-small text-italic">NIK: {{ props.row.nik ?? '[tidak ada]' }}</div> -->
+                      <div class="text-small text-italic">ID: <span class="text-semibold">{{ props.row.code }}</span></div>
                     </div>
                     <div class="flex items-center">
                       <q-btn dense flat color="info" :to="{ name: 'Constituent Edit Page', params: { id: props.row.id } }">
@@ -52,6 +53,10 @@
                 </q-card-section>
                 <q-separator />
                 <q-card-section class="q-py-sm  q-pl-lg">
+                  <div class="flex items-center justify-between text-small q-mb-sm">
+                    <div class="">NIK:</div>
+                    <div class="text-small text-italic">{{ props.row.nik ?? '[tidak ada]' }}</div>
+                  </div>
                   <div class="flex items-center justify-between text-small q-mb-sm">
                     <div class="">No. HP:</div>
                     <div class="text-small text-italic">{{ props.row.phone ?? '[tidak ada]' }}</div>
