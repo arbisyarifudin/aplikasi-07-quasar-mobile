@@ -16,9 +16,16 @@
               <!-- Kabupaten Bantul, Kapanewon Banguntapan, Desa Banguntapan, Dusun Durian -->
               {{ selectedUserArea.area_name }}
               <q-btn dense size="sm" flat no-caps color="grey-2" class="q-ml-sm"
-                :to="{ name: 'Constituent Select Area Page', query: { id: detailData.id } }">
+                :to="{ name: 'TPS Select Area Page', query: { id: detailData.id } }">
                 <ph-icon name="PencilSimple" size="15" />
               </q-btn>
+            </div>
+
+            <div class="text-small text-negative q-mt-md" v-if="errorState?.user_area_id?.length">
+              <div class="flex items-center">
+                <ph-icon name="Info" weight="fill" class="q-mr-sm" size="20"></ph-icon>
+                <span>{{ errorState.user_area_id }}</span>
+              </div>
             </div>
           </div>
           <div class="flex items-center" v-if="fetchLoading">
@@ -71,7 +78,7 @@
         <!-- <q-card class="q-mt-none"> -->
         <q-card-actions align="between">
           <q-btn type="reset" no-caps size="md" color="warning" flat
-            :to="{ name: 'Constituent Index Page', query: { refresh: backPageNeedRefresh } }">
+            :to="{ name: 'TPS Index Page', query: { refresh: backPageNeedRefresh } }">
             <ph-icon name="ArrowUUpLeft" size="16" class="q-mr-sm" />
             <span>Kembali</span>
           </q-btn>
@@ -171,7 +178,7 @@ const getDetail = async () => {
       })
 
       if (errorResponse.status === 404) {
-        await $router.push({ name: 'Constituent Index Page', query: { refresh: true } })
+        await $router.push({ name: 'TPS Index Page', query: { refresh: true } })
       }
     })
 }
@@ -222,7 +229,7 @@ const submitForm = () => {
     .then(async (res) => {
       console.log('res', res)
       showNotification('Konstituen berhasil diperbarui', 'positive', 'check')
-      // await $router.push({ name: 'Constituent Index Page', query: { refresh: true } })
+      // await $router.push({ name: 'TPS Index Page', query: { refresh: true } })
       submitLoading.value = false
       backPageNeedRefresh.value = true
     })
@@ -261,7 +268,7 @@ const checkSelectedUserArea = () => {
       globalStore.setSelectedUserArea(localSelectedUserArea)
       state.value.user_area_id = localSelectedUserArea.id
     } else {
-      $router.push({ name: 'Constituent Select Area Page' })
+      $router.push({ name: 'TPS Select Area Page' })
     }
   }
 }

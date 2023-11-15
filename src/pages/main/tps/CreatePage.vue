@@ -14,21 +14,29 @@
             <div class="text-small text-semibold q-mb-sm block">Wilayah Kerja:</div>
             <div class="text-small text-warning text-semibold">
               <!-- Kabupaten Bantul, Kapanewon Banguntapan, Desa Banguntapan, Dusun Durian -->
-              {{ selectedUserArea.area_name }}
+              {{ selectedUserArea.area_code }} - {{ selectedUserArea.area_name }}
               <q-btn dense size="sm" flat no-caps color="grey-2" class="q-ml-sm"
-                :to="{ name: 'Constituent Select Area Page' }">
+                :to="{ name: 'TPS Select Area Page' }">
                 <ph-icon name="PencilSimple" size="15" />
               </q-btn>
             </div>
+
+            <div class="text-small text-negative q-mt-md" v-if="errorState?.user_area_id?.length">
+              <div class="flex items-center">
+                <ph-icon name="Info" weight="fill" class="q-mr-sm" size="20"></ph-icon>
+                <span>{{ errorState.user_area_id }}</span>
+              </div>
+            </div>
+
           </div>
         </q-card-section>
         <q-card-section>
           <div class="q-mb-sm">
             <label for="tps_name" class="text-small text-semibold q-mb-sm block">Nama <span
                 class="text-warning">*</span></label>
-            <q-input id="tps_name" name="tps_name" v-model="state.name" placeholder="Masukkan nama TPS" outlined dense
+            <q-input id="tps_name" name="tps_name" v-model="state.name" placeholder="Masukkan nama/nomor TPS" outlined dense
               :error="errorState?.name?.length > 0" :error-message="errorState?.name"
-              @update:model-value="errorState.name = ''" hide-bottom-space />
+              @update:model-value="errorState.name = ''" hide-bottom-space hint="Misal: TPS 001, TPS 002, dst"/>
           </div>
           <div class="q-mb-sm">
             <label for="tps_address" class="text-small text-semibold q-mb-sm block">Alamat <span
@@ -58,7 +66,7 @@
         <!-- </q-card> -->
         <!-- <q-card class="q-mt-none"> -->
         <q-card-actions align="between">
-          <q-btn type="reset" no-caps size="md" color="warning" flat :to="{ name: 'Constituent Index Page' }">
+          <q-btn type="reset" no-caps size="md" color="warning" flat :to="{ name: 'TPS Index Page' }">
             <ph-icon name="X" size="16" class="q-mr-sm" />
             <span>Batal</span>
           </q-btn>
@@ -84,35 +92,27 @@ import { useRouter } from 'vue-router'
 
 const state = ref({
   name: '',
-  nik: '',
-  phone: '',
   address: '',
-  user_area_id: ''
+  note: ''
 })
 
 const errorState = ref({
   name: '',
-  nik: '',
-  phone: '',
   address: '',
-  user_area_id: ''
+  note: ''
 })
 
 const resetForm = () => {
   state.value = {
     name: '',
-    nik: '',
-    phone: '',
     address: '',
-    user_area_id: ''
+    note: ''
   }
 
   errorState.value = {
     name: '',
-    nik: '',
-    phone: '',
     address: '',
-    user_area_id: ''
+    note: ''
   }
 }
 
@@ -125,18 +125,16 @@ const submitForm = () => {
   // reset error
   errorState.value = {
     name: '',
-    nik: '',
-    phone: '',
     address: '',
-    user_area_id: ''
+    note: ''
   }
 
   submitLoading.value = true
-  api.post('v1/tps', state.value)
+  api.post('v1/area-polling', state.value)
     .then(async (res) => {
       console.log('res', res)
       showNotification('TPS berhasil ditambahkan', 'positive', 'check')
-      await $router.push({ name: 'Constituent Index Page', query: { refresh: true } })
+      await $router.push({ name: 'TPS Index Page', query: { refresh: true } })
       submitLoading.value = false
     })
     .catch((err) => {
@@ -174,7 +172,7 @@ const checkSelectedUserArea = () => {
       globalStore.setSelectedUserArea(localSelectedUserArea)
       state.value.user_area_id = localSelectedUserArea.id
     } else {
-      $router.push({ name: 'Constituent Select Area Page' })
+      $router.push({ name: 'TPS Select Area Page' })
     }
   }
 }

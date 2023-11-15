@@ -122,7 +122,7 @@ const search = ref('')
 const loading = ref(false)
 const pagination = ref({
   sortBy: 'created_at',
-  descending: false,
+  descending: true,
   page: 1,
   rowsPerPage: 5,
   rowsNumber: 0
