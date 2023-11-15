@@ -65,6 +65,10 @@
                     <div class="">Alamat:</div>
                     <div class="text-small text-italic">{{ props.row.address ?? '[tidak ada]' }}</div>
                   </div>
+                  <div class="flex items-center justify-between text-small q-mb-sm">
+                    <div class="">Wilayah:</div>
+                    <div class="text-small text-italic text-semibold">{{ props.row.area_code }}</div>
+                  </div>
                 </q-card-section>
               </q-card>
             </div>

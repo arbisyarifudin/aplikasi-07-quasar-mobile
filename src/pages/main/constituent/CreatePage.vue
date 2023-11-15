@@ -14,7 +14,7 @@
             <div class="text-small text-semibold q-mb-sm block">Wilayah Kerja:</div>
             <div class="text-small text-warning text-semibold">
               <!-- Kabupaten Bantul, Kapanewon Banguntapan, Desa Banguntapan, Dusun Durian -->
-              {{ selectedUserArea.area_name }}
+              {{ selectedUserArea.area_code }} - {{ selectedUserArea.area_name }}
               <q-btn dense size="sm" flat no-caps color="grey-2" class="q-ml-sm"
                 :to="{ name: 'Constituent Select Area Page' }">
                 <ph-icon name="PencilSimple" size="15" />

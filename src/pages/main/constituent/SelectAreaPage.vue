@@ -9,7 +9,9 @@
           <q-item v-for="item in userArea" :key="item.user_area_id" clickable v-ripple class="q-py-md"
             @click="selectArea(item)" :active="selectedUserArea?.user_area_id === item.id">
             <q-item-section>
-              <q-item-label style="line-height: 1.4em !important;">{{ item.area_name }}</q-item-label>
+              <q-item-label style="line-height: 1.4em !important;" class="text-small">Kode: <span class="text-semibold">{{ item.area_code }}</span></q-item-label>
+              <q-separator class="q-my-sm"/>
+              <q-item-label style="line-height: 1.4em !important;" class="text-small">{{ item.area_name }}</q-item-label>
             </q-item-section>
             <q-item-section side>
               <q-icon name="chevron_right" />

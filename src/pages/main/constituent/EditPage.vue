@@ -14,7 +14,7 @@
             <div class="text-small text-semibold q-mb-sm block">Wilayah Kerja:</div>
             <div class="text-small text-warning text-semibold">
               <!-- Kabupaten Bantul, Kapanewon Banguntapan, Desa Banguntapan, Dusun Durian -->
-              {{ selectedUserArea.area_name }}
+              {{ selectedUserArea.area_code }} - {{ selectedUserArea.area_name }}
               <q-btn dense size="sm" flat no-caps color="grey-2" class="q-ml-sm"
                 :to="{ name: 'Constituent Select Area Page', query: { id: detailData.id } }">
                 <ph-icon name="PencilSimple" size="15" />
@@ -61,9 +61,9 @@
           <div class="q-mb-sm">
             <label for="constituent_note" class="text-small text-semibold q-mb-sm block">Keterangan <span
                 class="text-warning text-caption">[tidak wajib]</span></label>
-            <q-input id="constituent_note" name="constituent_note" type="textarea" autogrow
-              input-style="min-height: 80px" v-model="state.note" placeholder="Masukkan keterangan tambahan jika perlu" outlined
-              dense :error="errorState?.note?.length > 0" :error-message="errorState?.note"
+            <q-input id="constituent_note" name="constituent_note" type="textarea" autogrow input-style="min-height: 80px"
+              v-model="state.note" placeholder="Masukkan keterangan tambahan jika perlu" outlined dense
+              :error="errorState?.note?.length > 0" :error-message="errorState?.note"
               @update:model-value="errorState.note = ''" hide-bottom-space />
           </div>
         </q-card-section>
