@@ -19,16 +19,6 @@
         <q-table ref="tableRef" grid flat :rows="rows" :columns="columns" row-key="uuid" v-model:pagination="pagination"
           :loading="loading" :filter="search" binary-state-sort @request="onRequest" hide-pagination
           table-header-class="bg-primaryx text-darkx">
-          <!-- <template v-slot:top-left>
-          <div class="text-h6 text-semibold">TPS</div>
-        </template>
-        <template v-slot:top-right>
-          <q-input borderless dense debounce="300" v-model="search" placeholder="Cari">
-            <template v-slot:append>
-              <q-icon name="search" />
-            </template>
-          </q-input>
-        </template> -->
           <template v-slot:item="props">
             <div class="q-pa-xs col-xs-12 col-sm-6 col-md-4 q-mb-sm">
               <q-card flat bordered>
@@ -37,8 +27,8 @@
                 <q-card-section class="column q-py-sm q-pl-lg">
                   <div class="flex items-center justify-between">
                     <div class="">
-                      <div class="text-h6 text-semibold">TPS 001</div>
-                      <div class="text-small text-italic">Saksi: 3 orang</div>
+                      <div class="text-h6 text-semibold">{{ props.row.name }}</div>
+                      <div class="text-small text-italic">Saksi: 0 orang</div>
                     </div>
                     <div class="flex items-center">
                       <q-btn dense flat color="info"
@@ -52,14 +42,16 @@
                   </div>
                 </q-card-section>
                 <q-separator />
-                <q-card-section class="q-py-sm q-pl-lg hidden">
+                <q-card-section class="q-py-sm q-pl-lg">
                   <div class="flex items-center justify-between text-small q-mb-sm">
-                    <div class="">No. HP:</div>
-                    <div class="text-small text-italic">{{ props.row.phone ?? '[tidak ada]' }}</div>
+                    <div class="">Alamat TPS:</div>
+                    <!-- <div class="text-small text-italic">{{ props.row.address ?? '[tidak ada]' }}</div> -->
+                     <div class="text-small text-italic" style="font-size: 10px; line-height: 16px;">{{ props.row.address }}</div>
                   </div>
                   <div class="flex items-center justify-between text-small q-mb-sm">
-                    <div class="">Alamat:</div>
-                    <div class="text-small text-italic">{{ props.row.address ?? '[tidak ada]' }}</div>
+                    <div class="">Wilayah Kerja:</div>
+                    <!-- <div class="text-small text-italic" style="font-size: 10px; line-height: 16px;">{{ props.row.area_name }}</div> -->
+                    <div class="text-small text-italic">{{ props.row.area_code }}</div>
                   </div>
                 </q-card-section>
               </q-card>
@@ -67,7 +59,8 @@
           </template>
           <template v-slot:no-data>
             <div class="flex justify-center full-width">
-              <div class="text-h6 text-center">Belum ada data. <br>Silahkan <router-link :to="{ name: 'TPS Create Page' }" class="text-primary">input data</router-link> lebih dahulu.</div>
+              <div class="text-h6 text-center">Belum ada data. <br>Silahkan <router-link :to="{ name: 'TPS Create Page' }"
+                  class="text-primary">input data</router-link> lebih dahulu.</div>
             </div>
           </template>
         </q-table>
@@ -110,9 +103,9 @@ const columns = [
     sortable: true
   },
   {
-    name: 'number',
-    label: 'Number',
-    field: 'number',
+    name: 'area_name',
+    label: 'Wilayah Kerja',
+    field: 'area_name',
     align: 'left',
     sortable: true
   },
@@ -149,7 +142,7 @@ async function fetchFromServer ({
   page,
   rowsPerPage
 }) {
-  return await getAPI('/v1/polling-area', {
+  return await getAPI('/v1/area-polling', {
     params: {
       keyword: filter,
       page,
@@ -261,7 +254,7 @@ const openDeleteDialog = (item) => {
 
   $q.dialog({
     title: 'Hapus TPS',
-    message: 'Apakah Anda yakin ingin menghapus konstituen ini?',
+    message: 'Apakah Anda yakin ingin menghapus TPS ini?',
     persistent: deleteLoading.value,
     cancel: {
       label: 'Tidak',
@@ -278,7 +271,7 @@ const openDeleteDialog = (item) => {
     deleteLoading.value = true
     globalStore.setLoadingState(true)
     globalStore.setLoadingTitleState('Menghapus...')
-    api.delete('v1/polling-area/' + item.id)
+    api.delete('v1/area-polling/' + item.id)
       .then(res => {
         console.log('res', res)
         showNotification('TPS berhasil dihapus', 'positive', 'check')
