@@ -1,10 +1,10 @@
 <template>
   <q-page class="main">
     <!-- <div class="text-h4 text-semibold q-mb-sm">Dashboard</div> -->
-    <div class="">
+    <div class="hidden">
       <div class="alert alert--negative q-mb-md" v-if="userProfile.status !== 'active'">
         <ph-icon name="WarningCircle" size="40px" />
-        <span class="text-dark">Akun Anda belum aktif. Silahkan cek email Anda untuk melakukan aktivasi akun.</span>
+        <span class="text-dark">Akun Anda belum aktif. Silahkan cek nomor Anda untuk melakukan aktivasi akun.</span>
       </div>
     </div>
     <div class="text-medium">

@@ -1,162 +1,103 @@
 <template>
   <div>
-    <!-- login page that split into 2 grid, the left on is for form, the right is image -->
     <div class="container">
-      <div class="row q-col-gutter-md">
+      <div class="row justify-center q-col-gutter-md">
         <div class="col-md-6 col-12 auth-col-left">
-          <img src="~/assets/logo.png" alt="logo" class="logo" />
-          <div class="auth-left">
-            <div class="auth-left__header q-mb-xl">
-              <div class="text-h2 text-medium text-primary">
-                Create an account
-              </div>
-              <p class="text-h5 text-medium text-grey-7">
-                Enter your details to create your account and start your journey
+          <div class="auth-left" style="margin-bottom: 60px">
+            <div class="text-center q-mb-md">
+              <img src="~/assets/logo.png" alt="logo" class="logo q-mx-auto" />
+            </div>
+            <div class="auth-left__header q-mb-xl text-center">
+              <div class="text-h4 text-medium text-primary">Buat akun</div>
+              <p class="text-medium text-grey-4">
+                Masukkan data diri Anda untuk membuat akun baru
               </p>
             </div>
 
             <q-form @submit.prevent="onSubmit" class="auth-form">
               <div class="q-mb-md">
-                <label for="name" class="block q-mb-sm text-h5 text-semibold"
-                  >Fullname <span class="text-primary">*</span></label
-                >
-                <q-input
-                  id="name"
-                  v-model="state.name"
-                  outlined
-                  type="name"
-                  placeholder="Enter your fullname"
-                  :rules="[(val) => val.length > 0 || 'Fullname is required']"
-                  :error="errorState?.name?.length > 0"
-                  :error-message="errorState?.name"
-                  @update:model-value="errorState.name = ''"
-                  hide-bottom-space
-                />
+                <label for="name" class="block q-mb-sm text-small text-semibold">Nama Lengkap <span
+                    class="text-primary">*</span></label>
+                <q-input id="name" v-model="state.name" outlined dense type="name" placeholder="Masukkan nama lengkap"
+                  :rules="[(val) => val.length > 0 || 'Nama lengkap diperlukan']" :error="errorState?.name?.length > 0"
+                  :error-message="errorState?.name" :autofocus="true" @update:model-value="errorState.name = ''"
+                  hide-bottom-space />
               </div>
               <div class="q-mb-md">
-                <label for="email" class="block q-mb-sm text-h5 text-semibold"
-                  >Email <span class="text-primary">*</span></label
-                >
-                <q-input
-                  id="email"
-                  v-model="state.email"
-                  outlined
-                  type="email"
-                  placeholder="Enter your email address"
-                  :rules="[(val) => val.length > 0 || 'Email is required']"
-                  :error="errorState?.email?.length > 0"
-                  :error-message="errorState?.email"
-                  @update:model-value="errorState.email = ''"
-                  hide-bottom-space
-                />
+                <label for="nik" class="block q-mb-sm text-small text-semibold">NIK <span
+                    class="text-primary">*</span></label>
+                <q-input id="nik" v-model="state.nik" outlined dense type="nik" placeholder="Masukkan NIK"
+                  :rules="[(val) => val.length > 0 || 'NIK diperlukan']" :error="errorState?.nik?.length > 0"
+                  :error-message="errorState?.nik" @update:model-value="errorState.nik = ''" hide-bottom-space />
               </div>
               <div class="q-mb-md">
-                <label
-                  for="password"
-                  class="block q-mb-sm text-h5 text-semibold"
-                  >Password <span class="text-primary">*</span></label
-                >
-                <q-input
-                  v-model="state.password"
-                  outlined
-                  :type="showPassword ? 'text' : 'password'"
-                  placeholder="Enter your password"
-                  :rules="[(val) => val.length > 0 || 'Password is required']"
-                  :error="errorState?.password?.length > 0"
-                  :error-message="errorState?.password"
-                  @update:model-value="errorState.password = ''"
-                  hide-bottom-space
-                  autocomplete="new-password"
-                >
+                <label for="phone" class="block q-mb-sm text-small text-semibold">No. HP <span
+                    class="text-primary">*</span></label>
+                <q-input id="phone" v-model="state.phone" outlined dense type="phone" placeholder="Masukkan No. HP"
+                  :rules="[(val) => val.length > 0 || 'No. HP diperlukan']" :error="errorState?.phone?.length > 0"
+                  :error-message="errorState?.phone" @update:model-value="errorState.phone = ''" hide-bottom-space />
+              </div>
+              <div class="q-mb-md">
+                <label for="address" class="block q-mb-sm text-small text-semibold">Alamat Domisili <span
+                    class="text-primary">*</span></label>
+                <q-input id="address" autogrow v-model="state.address" outlined dense type="textarea"
+                  placeholder="Masukkan Alamat" :rules="[(val) => val.length > 0 || 'Alamat diperlukan']"
+                  :error="errorState?.address?.length > 0" :error-message="errorState?.address"
+                  @update:model-value="errorState.address = ''" hide-bottom-space input-style="min-height: 70px" />
+              </div>
+              <div class="q-mb-md">
+                <label for="password" class="block q-mb-sm text-small text-semibold">Kata Sandi <span
+                    class="text-primary">*</span></label>
+                <q-input v-model="state.password" outlined dense :type="showPassword ? 'text' : 'password'"
+                  placeholder="Masukkan kata sandi" :rules="[(val) => val.length > 0 || 'Kata sandi diperlukan']"
+                  :error="errorState?.password?.length > 0" :error-message="errorState?.password"
+                  @update:model-value="errorState.password = ''" hide-bottom-space autocomplete="new-password"
+                  hint="Minimal 6 karakter">
                   <template #append>
-                    <q-icon
-                      :name="showPassword ? 'o_visibility_off' : 'o_visibility'"
-                      class="cursor-pointer"
-                      @click="showPassword = !showPassword"
-                    />
+                    <q-icon :name="showPassword ? 'o_visibility_off' : 'o_visibility'" class="cursor-pointer"
+                      @click="showPassword = !showPassword" />
                   </template>
                 </q-input>
               </div>
               <div class="q-mb-md">
-                <label
-                  for="confirmPassword"
-                  class="block q-mb-sm text-h5 text-semibold"
-                  >Confirm Password <span class="text-primary">*</span></label
-                >
-                <q-input
-                  v-model="state.confirmPassword"
-                  outlined
-                  :type="showPassword ? 'text' : 'password'"
-                  placeholder="Enter your password again"
-                  :rules="[(val) => val.length > 0 || 'Confirm Password is required']"
-                  :error="errorState?.confirmPassword?.length > 0"
-                  :error-message="errorState?.confirmPassword"
-                  @update:model-value="errorState.confirmPassword = ''"
-                  hide-bottom-space
-                  autocomplete="new-password"
-                >
-                  <template #append>
-                    <q-icon
-                      :name="showPassword ? 'o_visibility_off' : 'o_visibility'"
-                      class="cursor-pointer"
-                      @click="showPassword = !showPassword"
-                    />
+                <label for="area_id" class="block q-mb-sm text-small text-semibold">Wilayah Kerja <span
+                    class="text-primary">*</span></label>
+                <q-select id="area_id" v-model="state.area_id" :options="areaOptions" emit-value map-options
+                  :loading="areaLoading" outlined dense type="area_id" :error="errorState?.area_id?.length > 0"
+                  :error-message="errorState?.area_id" @update:model-value="errorState.area_id = ''"
+                  @filter="onFilterArea" @virtual-scroll="onScrollArea" use-input hide-selected fill-input
+                  input-debounce="300" hint="Cari wilayah" hide-bottom-space>
+                  <template v-slot:no-option>
+                    <q-item>
+                      <q-item-section class="text-grey">
+                        Tidak ada data.
+                      </q-item-section>
+                    </q-item>
                   </template>
-                </q-input>
+                </q-select>
               </div>
-              <div class="q-mb-sm">
-                <q-checkbox
-                  v-model="state.agree"
-                  class="q-mr-sm"
-                  dense
-                  color="primary"
-                  style="display: flex !important; align-items: center;"
-                >
-                  <div class="text-h5 text-medium text-grey-7">
-                    I agree to the
-                    <a href="javascript:void()" class="link text-h5 text-medium"
-                      >Terms of Service</a
-                    >
-                    and
-                    <a href="javascript:void()" class="link text-h5 text-medium"
-                      >Privacy Policy</a
-                    >
-                  </div>
-                </q-checkbox>
+              <div class="q-mb-sm row items-center justify-between hidden">
+                <div class="col-7">
+                  <q-checkbox v-model="state.rememberMe" label="Remember me" class="text-medium flex" />
+                </div>
+                <div class="col-5 text-right hidden">
+                  <router-link :to="{ name: 'Forgot Password Page' }" class="link text-medium">Forgot your
+                    password?</router-link>
+                </div>
               </div>
-              <q-btn
-                class="q-mt-md full-width q-py-sm"
-                color="primary"
-                label="Register"
-                no-caps
-                :loading="loading"
-                :disable="loading"
-                type="submit"
-              />
-              <div class="q-mt-md">
-                <div class="text-h5 text-medium text-grey-7 text-center">
-                  Already have an account?
-                  <router-link
-                    :to="{ name: 'Login Page' }"
-                    class="link text-h5 text-medium"
-                    >Login</router-link
-                  >
+              <q-btn class="q-mt-md full-width q-py-sm" color="primary" text-color="dark" label="Login" no-caps
+                :loading="loading" :disable="loading" type="submit" />
+              <div class="q-mt-md ">
+                <div class="text-medium text-grey-7 text-center">
+                  Sudah punya akun?
+                  <router-link :to="{ name: 'Login Page' }" class="link text-medium">Masuk</router-link>
                 </div>
               </div>
             </q-form>
           </div>
-          <div class="auth-footer">
-            <div class="text-h5 text-medium text-grey-5">
-              &copy;2023 ONERO Solutions All rights reserved.
-            </div>
+          <div class="auth-footer text-center full-width q-py-md">
+            <div class="text-small text-grey-5">&copy;2023 TRESNO Wibisono.</div>
           </div>
-        </div>
-        <div class="col-md-6 col-12" v-if="$q.screen.gt.sm">
-          <img
-            class="image-login"
-            src="~/assets/banner-login.png"
-            alt="login"
-          />
         </div>
       </div>
     </div>
@@ -164,28 +105,32 @@
 </template>
 
 <script setup>
-import { useQuasar } from 'quasar'
+import { LocalStorage, useQuasar } from 'quasar'
 import { register } from 'src/services/auth.service'
-import { reactive, ref } from 'vue'
+import { onMounted, reactive, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { mapErrorMessage } from 'src/utils/error'
+import { api } from 'src/boot/axios'
 
 const $q = useQuasar()
 const $router = useRouter()
 
 const state = reactive({
   name: '',
-  email: '',
+  nik: '',
+  phone: '',
   password: '',
-  confirmPassword: '',
-  agree: false
+  address: '',
+  area_id: ''
 })
 
 const errorState = reactive({
   name: '',
-  email: '',
+  nik: '',
+  phone: '',
   password: '',
-  confirmPassword: ''
+  address: '',
+  area_id: ''
 })
 
 const showPassword = ref(false)
@@ -194,6 +139,16 @@ const loading = ref(false)
 const onSubmit = () => {
   console.log(state)
 
+  // reset error state
+  Object.assign(errorState, {
+    name: '',
+    nik: '',
+    phone: '',
+    password: '',
+    address: '',
+    area_id: ''
+  })
+
   loading.value = true
   register(state)
     .then(async (res) => {
@@ -201,18 +156,21 @@ const onSubmit = () => {
 
       // show alert success
       $q.notify({
-        message: 'Register success! Please check your email to verify your account.',
+        message: 'Registrasi berhasil',
         color: 'positive',
         position: 'top',
         icon: 'check_circle',
         timeout: 2000
       })
 
+      // save token to local storage
+      LocalStorage.set('app_auth_token', res.data.token)
+
       // redirect to dashboard page
-      await $router.push({ name: 'Login Page' })
+      await $router.push({ name: 'Dashboard Page' })
     })
     .catch((err) => {
-      // console.log(err)
+      console.log(err)
       if (err.status === 422) {
         Object.assign(errorState, mapErrorMessage(err.data.errors))
       } else if (err.status === 401) {
@@ -220,7 +178,7 @@ const onSubmit = () => {
       } else {
         // show alert error
         $q.notify({
-          message: err.data.message || 'Something went wrong!',
+          message: err.data.message,
           color: 'negative',
           position: 'top',
           icon: 'error',
@@ -232,6 +190,129 @@ const onSubmit = () => {
       loading.value = false
     })
 }
+
+/* AREA */
+
+const areaData = ref([])
+const areaOptions = ref([])
+const areaLoading = ref(false)
+const searchAreaKeyword = ref('')
+const paginationArea = ref({
+  page: 1,
+  perPage: 10,
+  totalPage: 1
+})
+
+const getAreaData = async (append = false) => {
+  // areaOptions.value = []
+  areaLoading.value = true
+  api
+    .get('v1/area', {
+      params: {
+        keyword: searchAreaKeyword.value,
+        page: paginationArea.value.page,
+        limit: 20,
+        sortBy: 'name',
+        sortDir: 'asc'
+      }
+    })
+    .then((res) => {
+      const responseData = res.data?.data?.data || []
+      const responsePagination = res.data?.data?.pagination || {}
+
+      areaData.value = responseData
+
+      paginationArea.value.page = parseInt(responsePagination.current_page)
+      paginationArea.value.totalPage = responsePagination.total_pages
+
+      if (append) {
+        if (searchAreaKeyword.value && !areaData.value.length) {
+          areaOptions.value = responseData.map(item => {
+            return {
+              label: item.name,
+              value: item.id
+            }
+          })
+        } else {
+          areaOptions.value.push(...responseData.map(item => {
+            return {
+              label: item.name,
+              value: item.id
+            }
+          }))
+        }
+      } else {
+        areaOptions.value = responseData.map(item => {
+          return {
+            label: item.name,
+            value: item.id
+          }
+        })
+        if (responseData && responseData.length > 0) {
+          areaOptions.value.unshift({
+            label: '- Pilih Wilayah Kerja -',
+            value: ''
+          })
+        }
+      }
+    })
+    .catch((error) => {
+      console.log(error)
+    })
+    .finally(() => {
+      areaLoading.value = false
+    })
+}
+
+const onFilterArea = (val, update) => {
+  if (val === '') {
+    update(() => {
+      areaOptions.value = areaData.value.map(item => {
+        return {
+          label: item.name,
+          value: item.id
+        }
+      })
+      // here you have access to "ref" which
+      // is the Vue reference of the QSelect
+    })
+    return
+  }
+
+  update(() => {
+    const needle = val.toLowerCase()
+    const filterData = areaData.value.filter(v => {
+      return v.name.toLowerCase().indexOf(needle) > -1
+    })
+      .map(item => {
+        return {
+          label: item.name,
+          value: item.id
+        }
+      })
+
+    if (filterData.length > 0) {
+      areaOptions.value = filterData
+    } else {
+      searchAreaKeyword.value = needle
+      getAreaData(true)
+    }
+  })
+}
+
+const onScrollArea = (detail) => {
+  // console.log('onScrollArea', detail)
+  if (detail.direction === 'increase' && !searchAreaKeyword.value) {
+    if (detail.index === detail.to && paginationArea.value.page < paginationArea.value.totalPage) {
+      paginationArea.value.page++
+      getAreaData(true)
+    }
+  }
+}
+onMounted(() => {
+  getAreaData()
+})
+
 </script>
 
 <style lang="scss" scoped>
@@ -242,7 +323,7 @@ const onSubmit = () => {
   justify-content: center;
   // max-width: 1200px;
   margin: 0 auto;
-  padding: 50px 100px;
+  padding: 20px 15px;
 
   .row {
     width: 100%;
@@ -257,6 +338,12 @@ const onSubmit = () => {
   }
 }
 
+.logo {
+  width: 80px;
+  height: 80px;
+  object-fit: contain;
+}
+
 .auth {
   &-col-left {
     display: flex;
@@ -264,6 +351,7 @@ const onSubmit = () => {
     justify-content: space-between;
     align-items: flex-start;
   }
+
   &-left {
     width: 100%;
   }

@@ -1,8 +1,7 @@
 <template>
   <div>
-    <!-- login page that split into 2 grid, the left on is for form, the right is image -->
     <div class="container">
-      <div class="row justify-content-center q-col-gutter-md">
+      <div class="row justify-center q-col-gutter-md">
         <div class="col-md-6 col-12 auth-col-left">
           <div class="auth-left">
             <div class="text-center q-mb-md">
@@ -17,11 +16,11 @@
 
             <q-form @submit.prevent="onSubmit" class="auth-form">
               <div class="q-mb-md">
-                <label for="uid" class="block q-mb-sm text-small text-semibold">NIK / No. HP / Email <span
+                <label for="uid" class="block q-mb-sm text-small text-semibold">NIK / No. HP <span
                     class="text-primary">*</span></label>
                 <q-input id="uid" v-model="state.uid" outlined dense type="uid"
-                  placeholder="Masukkan NIK / No. HP / Email"
-                  :rules="[(val) => val.length > 0 || 'NIK / No HP / Email diperlukan']"
+                  placeholder="Masukkan NIK / No. HP"
+                  :rules="[(val) => val.length > 0 || 'NIK / No HP diperlukan']"
                   :error="errorState?.uid?.length > 0" :error-message="errorState?.uid" :autofocus="true"
                   @update:model-value="errorState.uid = ''" hide-bottom-space />
               </div>
@@ -57,7 +56,7 @@
               </div>
             </q-form>
           </div>
-          <div class="auth-footer text-center full-width">
+          <div class="auth-footer text-center full-width q-py-md">
             <div class="text-small text-grey-5">&copy;2023 TRESNO Wibisono.</div>
           </div>
         </div>
@@ -91,7 +90,7 @@ const showPassword = ref(false)
 const loading = ref(false)
 
 const onSubmit = () => {
-  console.log(state)
+  // console.log(state)
 
   // reset error state
   Object.assign(errorState, {
