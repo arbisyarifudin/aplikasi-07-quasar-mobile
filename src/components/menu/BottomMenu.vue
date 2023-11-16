@@ -56,10 +56,11 @@ const items = ref([
   },
   {
     label: 'Pengaturan',
-    name: 'Settings Page',
+    name: 'Setting Page',
     icon: 'Gear',
     action: () => {
       console.log('Pengaturan')
+      $router.push({ name: 'Setting Index Page' })
     }
   }
 ])
@@ -79,8 +80,8 @@ const isActive = (name) => {
     case 'TPS Edit Page':
       routeName = 'TPS Page'
       break
-    case 'Settings Page':
-      routeName = 'Settings Page'
+    case 'Setting Index Page':
+      routeName = 'Setting Page'
       break
   }
 

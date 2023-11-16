@@ -1,208 +1,68 @@
 <template>
-  <q-form
-    @submit.prevent="onSubmit"
-    @reset="onReset"
-    class="q-gutter-md q-px-md"
-  >
-    <div class="q-mb-sm">
-      <label for="picture" class="text-h5 text-semibold q-mb-sm block"
-        >Profile picture</label
-      >
+  <q-form @submit.prevent="onSubmit" @reset="onReset" class="q-gutter-md q-px-md">
+    <div class="q-mb-sm hidden">
+      <label for="picture" class="text-h6 text-semibold q-mb-sm block">Foto profil</label>
       <div class="flex">
-        <!-- <q-img
-          src="https://cdn.quasar.dev/img/boy-avatar.png"
-          style="width: 100px; height: 100px; border-radius: 50%"
-        /> -->
         <q-avatar size="100px" color="primary" style="border-radius: 50%">
-          <img
-            v-if="state.photoUrl"
-            :src="state.photoUrl"
-            @error="onPictureError"
-          />
-          <img v-else src="/avatar.jpg"/>
+          <img v-if="state.photoUrl" :src="state.photoUrl" @error="onPictureError" />
+          <img v-else src="~assets/logo.png" />
         </q-avatar>
       </div>
     </div>
-    <div class="q-mb-sm">
-      <label for="status" class="text-h5 text-semibold q-mb-sm block"
-        >Account Status</label
-      >
+    <div class="q-mb-sm hidden">
+      <label for="status" class="text-h6 text-semibold q-mb-sm block">Status Akun</label>
       <div class="flex">
-        <div :class="['inline',badgeStatus(state.status)]">{{state.statusLabel}}</div>
+        <div :class="['inline', badgeStatus(state.is_verified)]">Terverifikasi</div>
       </div>
     </div>
     <div class="q-mb-sm">
-      <label for="status" class="text-h5 text-semibold q-mb-sm block"
-        >Document Status</label
-      >
-      <div class="flex">
-        <div :class="['inline',badgeStatus(state.documentStatus)]">{{state.documentStatus}}</div>
+      <label for="user_name" class="text-h6 text-semibold q-mb-sm block">Nama lengkap
+      </label>
+      <q-input id="user_name" name="user_name" v-model="state.name" placeholder="Nama lengkap" outlined
+        :error="errState?.name?.length > 0" :error-message="errState?.name" @update:model-value="errState.name = ''"
+        hide-bottom-space readonly disable />
+    </div>
+    <div class="q-mb-sm">
+      <label for="user_nik" class="text-h6 text-semibold q-mb-sm block">NIK
+      </label>
+      <q-input id="user_nik" nik="user_nik" v-model="state.nik" placeholder="NIK" outlined
+        :error="errState?.nik?.length > 0" :error-message="errState?.nik" @update:model-value="errState.nik = ''"
+        hide-bottom-space readonly disable />
+    </div>
+    <div class="q-mb-sm hidden">
+      <label for="user_email" class="text-h6 text-semibold q-mb-sm block">Email
+      </label>
+      <q-input id="user_email" name="user_email" v-model="state.email" placeholder="Email" outlined
+        :error="errState?.email?.length > 0" :error-message="errState?.email" @update:model-value="errState.email = ''"
+        hide-bottom-space readonly disable />
+    </div>
+    <div class="q-mb-sm">
+      <label for="user_phone" class="text-h6 text-semibold q-mb-sm block">No. HP
+      </label>
+      <q-input id="user_phone" name="user_phone" v-model="state.phone" placeholder="No. HP" outlined
+        :error="errState?.phone?.length > 0" :error-message="errState?.phone" @update:model-value="errState.phone = ''"
+        hide-bottom-space :readonly="!isEditMode" />
+    </div>
+    <div class="q-mb-sm">
+      <label for="user_address" class="text-h6 text-semibold q-mb-sm block">Alamat Domisili
+      </label>
+      <q-input id="user_address" name="user_address" v-model="state.address" placeholder="Alamat Domisili" outlined
+        :error="errState?.address?.length > 0" :error-message="errState?.address"
+        @update:model-value="errState.address = ''" hide-bottom-space :readonly="!isEditMode" />
+    </div>
+    <div class="flex justify-between q-mt-lg">
+      <div class="hidden">
+        <q-btn label="Hapus Akun" icon="o_delete" color="dark" text-color="negative" no-caps class="q-px-sm" />
       </div>
-    </div>
-    <div class="q-mb-sm">
-      <label for="member_name" class="text-h5 text-semibold q-mb-sm block"
-        >Fullname
-      </label>
-      <q-input
-        id="member_name"
-        name="member_name"
-        v-model="state.name"
-        placeholder="Fullname"
-        outlined
-        :error="errState?.name?.length > 0"
-        :error-message="errState?.name"
-        @update:model-value="errState.name = ''"
-        hide-bottom-space
-        readonly
-        disable
-        />
-        <!-- :readonly="!isEditMode" -->
-    </div>
-    <div class="q-mb-sm">
-      <label for="member_email" class="text-h5 text-semibold q-mb-sm block"
-        >Email
-      </label>
-      <q-input
-        id="member_email"
-        name="member_email"
-        v-model="state.email"
-        placeholder="Email"
-        outlined
-        :error="errState?.email?.length > 0"
-        :error-message="errState?.email"
-        @update:model-value="errState.email = ''"
-        hide-bottom-space
-        readonly
-        disable
-      />
-    </div>
-    <div class="q-mb-sm">
-      <label for="member_phone" class="text-h5 text-semibold q-mb-sm block"
-        >Phone number
-      </label>
-      <q-input
-        id="member_phone"
-        name="member_phone"
-        v-model="state.phone"
-        placeholder="Phone number"
-        outlined
-        :error="errState?.phone?.length > 0"
-        :error-message="errState?.phone"
-        @update:model-value="errState.phone = ''"
-        hide-bottom-space
-        :readonly="!isEditMode"
-      />
-    </div>
-    <div class="q-mb-sm">
-      <label for="member_address" class="text-h5 text-semibold q-mb-sm block"
-        >Address
-      </label>
-      <q-input
-        id="member_address"
-        name="member_address"
-        v-model="state.address"
-        placeholder="Address"
-        outlined
-        :error="errState?.address?.length > 0"
-        :error-message="errState?.address"
-        @update:model-value="errState.address = ''"
-        hide-bottom-space
-        :readonly="!isEditMode"
-      />
-    </div>
-    <div class="q-mb-sm">
-      <label for="member_city" class="text-h5 text-semibold q-mb-sm block"
-        >City
-      </label>
-      <q-input
-        id="member_city"
-        name="member_city"
-        v-model="state.city"
-        placeholder="Address"
-        outlined
-        :error="errState?.city?.length > 0"
-        :error-message="errState?.city"
-        @update:model-value="errState.city = ''"
-        hide-bottom-space
-        :readonly="!isEditMode"
-      />
-    </div>
-    <div class="q-mb-sm">
-      <label for="member_country" class="text-h5 text-semibold q-mb-sm block"
-        >Country
-      </label>
-      <q-input
-        id="member_country"
-        name="member_country"
-        v-model="state.country"
-        placeholder="Address"
-        outlined
-        :error="errState?.country?.length > 0"
-        :error-message="errState?.country"
-        @update:model-value="errState.country = ''"
-        hide-bottom-space
-        :readonly="!isEditMode"
-      />
-    </div>
-    <div class="q-mb-sm">
-      <label for="member_zip" class="text-h5 text-semibold q-mb-sm block"
-        >ZIP / Postal code
-      </label>
-      <q-input
-        id="member_zip"
-        name="member_zip"
-        v-model="state.zip"
-        placeholder="Address"
-        outlined
-        :error="errState?.zip?.length > 0"
-        :error-message="errState?.zip"
-        @update:model-value="errState.zip = ''"
-        hide-bottom-space
-        :readonly="!isEditMode"
-      />
-    </div>
-    <div class="row justify-between q-mt-lg">
-      <div>
-        <q-btn
-          label="Delete account"
-          icon="o_delete"
-          color="negative"
-          no-caps
-          class="q-px-lg"
-        />
-      </div>
-      <div>
-        <q-btn
-          v-if="!isEditMode"
-          label="Edit"
-          color="info"
-          no-caps
-          type="submit"
-          class="q-ml-md q-px-lg"
-          icon="o_edit"
-          @click="isEditMode = true"
-        />
-        <q-btn
-          v-if="isEditMode"
-          label="Save Changes"
-          color="positive"
-          no-caps
-          type="submit"
-          icon="save"
-          class="q-px-lg"
-          :disable="loading || submissionDisabled"
-          :loading="loading"
-        />
-        <q-btn
-          v-if="isEditMode"
-          label="Cancel"
-          color="grey-8"
-          outline
-          no-caps
-          icon="close"
-          class="q-ml-md q-px-lg"
-          @click="onCancel"
-        />
+      <div class="flex items-center justify-between full-width">
+        <q-btn v-if="!isEditMode" color="primary" text-color="dark" no-caps type="submit" @click="isEditMode = true">
+          <ph-icon name="PencilSimple" class="q-mr-sm" />
+          Edit
+        </q-btn>
+        <q-btn v-if="isEditMode" label="Simpan" color="primary" text-color="dark" no-caps type="submit" icon="save" class="q-px-sm"
+          :disable="loading || submissionDisabled" :loading="loading" />
+        <q-btn v-if="isEditMode" label="Batal" color="grey-5" outline no-caps icon="close" class="q-ml-md q-px-sm"
+          @click="onCancel" />
       </div>
     </div>
   </q-form>
@@ -225,9 +85,6 @@ const state = ref({
   name: '',
   email: '',
   phone: '',
-  city: '',
-  country: '',
-  zip: '',
   address: ''
 })
 
@@ -235,9 +92,6 @@ const errState = ref({
   name: '',
   email: '',
   phone: '',
-  city: '',
-  country: '',
-  zip: '',
   address: ''
 })
 
@@ -246,18 +100,12 @@ const onReset = () => {
     name: '',
     email: '',
     phone: '',
-    city: '',
-    country: '',
-    zip: '',
     address: ''
   }
   errState.value = {
     name: '',
     email: '',
     phone: '',
-    city: '',
-    country: '',
-    zip: '',
     address: ''
   }
   getPersonalInfo()
@@ -275,16 +123,18 @@ const onPictureError = () => {
 /* STATUS */
 const badgeStatus = (status) => {
   switch (status) {
-    case 'inactive':
     case 0:
+    case false:
+    case 'inactive':
     case 'Not Verified':
       return 'badge-status badge-status--warning'
-    case 'active':
     case 1:
+    case true:
+    case 'active':
     case 'Verified':
       return 'badge-status badge-status--positive'
-    case 'banned':
     case 2:
+    case 'banned':
     case 'Rejected':
       return 'badge-status badge-status--negative'
     default:
@@ -304,9 +154,17 @@ const submissionDisabled = ref(false)
 
 const getPersonalInfo = async () => {
   loading.value = true
-  await getAPI('v1/member/profile')
+  await getAPI('v1/user/profile')
     .then((res) => {
-      state.value = res.data
+      state.value = {
+        name: res.data.name,
+        email: res.data.email,
+        nik: res.data.profile?.nik,
+        phone: res.data.profile?.phone,
+        address: res.data.profile?.address,
+        picture: res.data.profile?.picture
+      }
+      console.log(state.value)
     })
     .catch(async (err) => {
       console.log(err)
@@ -318,10 +176,10 @@ const getPersonalInfo = async () => {
 
 const __savePersonal = async () => {
   loading.value = true
-  await putAPI('v1/member/update-profile', state.value)
+  await putAPI('v1/user/update-profile', state.value)
     .then((res) => {
       $q.notify({
-        message: 'Your personal information updated',
+        message: 'Data berhasil diperbarui',
         type: 'positive',
         position: 'top'
       })
