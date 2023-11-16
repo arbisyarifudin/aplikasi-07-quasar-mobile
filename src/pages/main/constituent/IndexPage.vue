@@ -74,7 +74,7 @@
             </div>
           </template>
           <template v-slot:no-data>
-            <div class="flex justify-center full-width">
+            <div class="flex justify-center full-width" v-if="!loading">
               <div class="text-h6 text-center">Belum ada data. <br>Silahkan <router-link :to="{ name: 'Constituent Create Page' }" class="text-primary">input data</router-link> lebih dahulu.</div>
             </div>
           </template>

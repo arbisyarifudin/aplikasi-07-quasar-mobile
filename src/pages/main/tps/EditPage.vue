@@ -4,7 +4,7 @@
       <q-card>
         <q-card-section>
           <div class="flex items-center justify-between">
-            <div class="text-h6 text-semibold">Ubah Konstituen</div>
+            <div class="text-h6 text-semibold">Ubah TPS</div>
             <div class="text-small text-warning">*) wajib</div>
           </div>
         </q-card-section>
@@ -14,19 +14,23 @@
             <div class="text-small text-semibold q-mb-sm block">Wilayah Kerja:</div>
             <div class="text-small text-warning text-semibold">
               <!-- Kabupaten Bantul, Kapanewon Banguntapan, Desa Banguntapan, Dusun Durian -->
-              {{ selectedUserArea.area_name }}
-              <q-btn dense size="sm" flat no-caps color="grey-2" class="q-ml-sm"
-                :to="{ name: 'TPS Select Area Page', query: { id: detailData.id } }">
+              {{ selectedUserArea.area_code }} - {{ selectedUserArea.area_name }}
+              <q-btn dense size="sm" flat no-caps color="grey-2" class="q-ml-sm" :to="{ name: 'TPS Select Area Page' }">
                 <ph-icon name="PencilSimple" size="15" />
               </q-btn>
             </div>
-
             <div class="text-small text-negative q-mt-md" v-if="errorState?.user_area_id?.length">
               <div class="flex items-center">
                 <ph-icon name="Info" weight="fill" class="q-mr-sm" size="20"></ph-icon>
                 <span>{{ errorState.user_area_id }}</span>
               </div>
             </div>
+          </div>
+          <div class="q-mb-sm" v-else-if="!selectedUserArea && (detailData.id && !detailData.user_area_id)">
+            <span>Pilih wilayah kerja:</span>
+            <q-btn dense size="sm" flat no-caps color="primary" class="q-ml-sm" :to="{ name: 'TPS Select Area Page' }">
+              <ph-icon name="PencilSimple" size="15" /> Pilih
+            </q-btn>
           </div>
           <div class="flex items-center" v-if="fetchLoading">
             <q-spinner />
@@ -35,42 +39,35 @@
         </q-card-section>
         <q-card-section>
           <div class="q-mb-sm">
-            <label for="constituent_name" class="text-small text-semibold q-mb-sm block">Nama <span
+            <label for="tps_name" class="text-small text-semibold q-mb-sm block">Nama <span
                 class="text-warning">*</span></label>
-            <q-input id="constituent_name" name="constituent_name" v-model="state.name"
-              placeholder="Masukkan nama konstituen" outlined dense :error="errorState?.name?.length > 0"
-              :error-message="errorState?.name" @update:model-value="errorState.name = ''" :disable="fetchLoading"
-              hide-bottom-space />
+            <q-input id="tps_name" name="tps_name" v-model="state.name" placeholder="Masukkan nama/nomor TPS" outlined
+              dense :error="errorState?.name?.length > 0" :error-message="errorState?.name"
+              @update:model-value="errorState.name = ''" :disable="fetchLoading" hide-bottom-space
+              hint="Misal: TPS 001, TPS 002, dst" />
           </div>
           <div class="q-mb-sm">
-            <label for="constituent_nik" class="text-small text-semibold q-mb-sm block">NIK <span
-                class="text-warning text-caption">[tidak wajib]</span></label>
-            <q-input id="constituent_nik" name="constituent_nik" v-model="state.nik" placeholder="Masukkan NIK konstituen"
-              outlined dense :error="errorState?.nik?.length > 0" :error-message="errorState?.nik"
-              @update:model-value="errorState.nik = ''" :disable="fetchLoading" hide-bottom-space />
-          </div>
-          <div class="q-mb-sm">
-            <label for="constituent_phone" class="text-small text-semibold q-mb-sm block">No. HP / WA <span
-                class="text-warning text-caption">[tidak wajib]</span></label>
-            <q-input id="constituent_phone" name="constituent_phone" v-model="state.phone"
-              placeholder="Masukkan No. HP konstituen" outlined dense :error="errorState?.phone?.length > 0"
-              :error-message="errorState?.phone" @update:model-value="errorState.phone = ''" :disable="fetchLoading"
-              hide-bottom-space />
-          </div>
-          <div class="q-mb-sm">
-            <label for="constituent_address" class="text-small text-semibold q-mb-sm block">Alamat <span
-                class="text-warning text-caption">[tidak wajib]</span></label>
-            <q-input id="constituent_address" name="constituent_address" type="textarea" autogrow
-              input-style="min-height: 80px" v-model="state.address" placeholder="Masukkan alamat konstituen" outlined
-              dense :error="errorState?.address?.length > 0" :error-message="errorState?.address"
+            <label for="tps_address" class="text-small text-semibold q-mb-sm block">Alamat <span
+                class="text-warning">*</span></label>
+            <q-input id="tps_address" name="tps_address" type="textarea" autogrow input-style="min-height: 80px"
+              v-model="state.address" placeholder="Masukkan alamat TPS" outlined dense
+              :error="errorState?.address?.length > 0" :error-message="errorState?.address"
               @update:model-value="errorState.address = ''" :disable="fetchLoading" hide-bottom-space />
+          </div>
+          <div class="q-mb-sm">
+            <label for="tps_note" class="text-small text-semibold q-mb-sm block">Keterangan <span
+                class="text-warning text-caption">[tidak wajib]</span></label>
+            <q-input id="tps_note" name="tps_note" type="textarea" autogrow input-style="min-height: 80px"
+              v-model="state.note" placeholder="Masukkan keterangan tambahan jika perlu" outlined dense
+              :error="errorState?.note?.length > 0" :error-message="errorState?.note"
+              @update:model-value="errorState.note = ''" :disable="fetchLoading" hide-bottom-space />
           </div>
         </q-card-section>
         <q-card-section class="q-py-none hidden">
           <div class="flex justify-center">
             <q-btn dense no-caps size="sm" flat>
               <ph-icon name="Plus" size="16" class="q-mr-sm" />
-              <span>Tambah Konstituen</span>
+              <span>Tambah TPS</span>
             </q-btn>
           </div>
         </q-card-section>
@@ -104,35 +101,27 @@ import { useRoute, useRouter } from 'vue-router'
 
 const state = ref({
   name: '',
-  nik: '',
-  phone: '',
   address: '',
-  user_area_id: ''
+  note: ''
 })
 
 const errorState = ref({
   name: '',
-  nik: '',
-  phone: '',
   address: '',
-  user_area_id: ''
+  note: ''
 })
 
 const resetForm = () => {
   state.value = {
     name: '',
-    nik: '',
-    phone: '',
     address: '',
-    user_area_id: ''
+    note: ''
   }
 
   errorState.value = {
     name: '',
-    nik: '',
-    phone: '',
     address: '',
-    user_area_id: ''
+    note: ''
   }
 }
 
@@ -143,8 +132,8 @@ const getDetail = async () => {
   const id = $route.params.id
   fetchLoading.value = true
 
-  // get detail constituent data
-  await api.get('v1/constituent/' + id)
+  // get detail tps data
+  await api.get('v1/area-polling/' + id)
     .then(async (res) => {
       console.log('res', res)
       detailData.value = res.data.data
@@ -218,14 +207,12 @@ const submitForm = () => {
   // reset error
   errorState.value = {
     name: '',
-    nik: '',
-    phone: '',
     address: '',
-    user_area_id: ''
+    note: ''
   }
 
   submitLoading.value = true
-  api.put('v1/constituent/' + detailData.value.id, state.value)
+  api.put('v1/area-polling/' + detailData.value.id, state.value)
     .then(async (res) => {
       console.log('res', res)
       showNotification('Konstituen berhasil diperbarui', 'positive', 'check')

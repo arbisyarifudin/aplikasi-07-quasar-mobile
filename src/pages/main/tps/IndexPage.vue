@@ -32,7 +32,7 @@
                     </div>
                     <div class="flex items-center">
                       <q-btn dense flat color="info"
-                        :to="{ name: 'Constituent Edit Page', params: { id: props.row.id } }">
+                        :to="{ name: 'TPS Edit Page', params: { id: props.row.id } }">
                         <ph-icon name="PencilSimple" size="15"></ph-icon>
                       </q-btn>
                       <q-btn dense flat color="negative" class="q-ml-sm" @click="openDeleteDialog(props.row)">
@@ -58,7 +58,7 @@
             </div>
           </template>
           <template v-slot:no-data>
-            <div class="flex justify-center full-width">
+            <div class="flex justify-center full-width" v-if="!loading">
               <div class="text-h6 text-center">Belum ada data. <br>Silahkan <router-link :to="{ name: 'TPS Create Page' }"
                   class="text-primary">input data</router-link> lebih dahulu.</div>
             </div>

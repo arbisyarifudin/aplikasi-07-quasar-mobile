@@ -15,8 +15,7 @@
             <div class="text-small text-warning text-semibold">
               <!-- Kabupaten Bantul, Kapanewon Banguntapan, Desa Banguntapan, Dusun Durian -->
               {{ selectedUserArea.area_code }} - {{ selectedUserArea.area_name }}
-              <q-btn dense size="sm" flat no-caps color="grey-2" class="q-ml-sm"
-                :to="{ name: 'TPS Select Area Page' }">
+              <q-btn dense size="sm" flat no-caps color="grey-2" class="q-ml-sm" :to="{ name: 'TPS Select Area Page' }">
                 <ph-icon name="PencilSimple" size="15" />
               </q-btn>
             </div>
@@ -27,16 +26,15 @@
                 <span>{{ errorState.user_area_id }}</span>
               </div>
             </div>
-
           </div>
         </q-card-section>
         <q-card-section>
           <div class="q-mb-sm">
             <label for="tps_name" class="text-small text-semibold q-mb-sm block">Nama <span
                 class="text-warning">*</span></label>
-            <q-input id="tps_name" name="tps_name" v-model="state.name" placeholder="Masukkan nama/nomor TPS" outlined dense
-              :error="errorState?.name?.length > 0" :error-message="errorState?.name"
-              @update:model-value="errorState.name = ''" hide-bottom-space hint="Misal: TPS 001, TPS 002, dst"/>
+            <q-input id="tps_name" name="tps_name" v-model="state.name" placeholder="Masukkan nama/nomor TPS" outlined
+              dense :error="errorState?.name?.length > 0" :error-message="errorState?.name"
+              @update:model-value="errorState.name = ''" hide-bottom-space hint="Misal: TPS 001, TPS 002, dst" />
           </div>
           <div class="q-mb-sm">
             <label for="tps_address" class="text-small text-semibold q-mb-sm block">Alamat <span
