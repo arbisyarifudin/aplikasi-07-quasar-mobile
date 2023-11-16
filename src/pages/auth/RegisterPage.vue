@@ -18,7 +18,7 @@
               <div class="q-mb-md">
                 <label for="name" class="block q-mb-sm text-small text-semibold">Nama Lengkap <span
                     class="text-primary">*</span></label>
-                <q-input id="name" v-model="state.name" outlined dense type="name" placeholder="Masukkan nama lengkap"
+                <q-input id="name" v-model="state.name" outlined dense type="text" placeholder="Masukkan nama lengkap"
                   :rules="[(val) => val.length > 0 || 'Nama lengkap diperlukan']" :error="errorState?.name?.length > 0"
                   :error-message="errorState?.name" :autofocus="true" @update:model-value="errorState.name = ''"
                   hide-bottom-space />
@@ -26,14 +26,26 @@
               <div class="q-mb-md">
                 <label for="nik" class="block q-mb-sm text-small text-semibold">NIK <span
                     class="text-primary">*</span></label>
-                <q-input id="nik" v-model="state.nik" outlined dense type="nik" placeholder="Masukkan NIK"
+                <q-input id="nik" v-model="state.nik" outlined dense type="number" placeholder="Masukkan NIK"
                   :rules="[(val) => val.length > 0 || 'NIK diperlukan']" :error="errorState?.nik?.length > 0"
                   :error-message="errorState?.nik" @update:model-value="errorState.nik = ''" hide-bottom-space />
               </div>
               <div class="q-mb-md">
+                <label for="ktp_file" class="block q-mb-sm text-small text-semibold">Foto KTP <span
+                    class="text-primary">*</span></label>
+                <!-- <q-input id="ktp_file" v-model="state.ktp_file" outlined dense type="file" :error="errorState?.ktp_file?.length > 0" :error-message="errorState?.ktp_file" @update:model-value="errorState.ktp_file = ''" hide-bottom-space /> -->
+                <q-file v-model="state.ktp_file" outlined dense :error="errorState?.ktp_file?.length > 0"
+                  :error-message="errorState?.ktp_file" @update:model-value="errorState.ktp_file = ''" hide-bottom-space accept=".jpg,.jpeg,.png,.pdf"
+                  counter>
+                  <template v-slot:prepend>
+                    <q-icon name="attach_file" />
+                  </template>
+                </q-file>
+              </div>
+              <div class="q-mb-md">
                 <label for="phone" class="block q-mb-sm text-small text-semibold">No. HP <span
                     class="text-primary">*</span></label>
-                <q-input id="phone" v-model="state.phone" outlined dense type="phone" placeholder="Masukkan No. HP"
+                <q-input id="phone" v-model="state.phone" outlined dense type="number" placeholder="Masukkan No. HP"
                   :rules="[(val) => val.length > 0 || 'No. HP diperlukan']" :error="errorState?.phone?.length > 0"
                   :error-message="errorState?.phone" @update:model-value="errorState.phone = ''" hide-bottom-space />
               </div>
@@ -76,16 +88,7 @@
                   </template>
                 </q-select>
               </div>
-              <div class="q-mb-sm row items-center justify-between hidden">
-                <div class="col-7">
-                  <q-checkbox v-model="state.rememberMe" label="Remember me" class="text-medium flex" />
-                </div>
-                <div class="col-5 text-right hidden">
-                  <router-link :to="{ name: 'Forgot Password Page' }" class="link text-medium">Forgot your
-                    password?</router-link>
-                </div>
-              </div>
-              <q-btn class="q-mt-md full-width q-py-sm" color="primary" text-color="dark" label="Login" no-caps
+              <q-btn class="q-mt-md full-width q-py-sm" color="primary" text-color="dark" label="Buat Akun" no-caps
                 :loading="loading" :disable="loading" type="submit" />
               <div class="q-mt-md ">
                 <div class="text-medium text-grey-7 text-center">
@@ -121,7 +124,8 @@ const state = reactive({
   phone: '',
   password: '',
   address: '',
-  area_id: ''
+  area_id: '',
+  ktp_file: null
 })
 
 const errorState = reactive({
@@ -130,7 +134,8 @@ const errorState = reactive({
   phone: '',
   password: '',
   address: '',
-  area_id: ''
+  area_id: '',
+  ktp_file: ''
 })
 
 const showPassword = ref(false)
@@ -146,11 +151,22 @@ const onSubmit = () => {
     phone: '',
     password: '',
     address: '',
-    area_id: ''
+    area_id: '',
+    ktp_file: ''
   })
 
+  // form data
+  const formData = new FormData()
+  formData.append('name', state.name)
+  formData.append('nik', state.nik)
+  formData.append('phone', state.phone)
+  formData.append('password', state.password)
+  formData.append('address', state.address)
+  formData.append('area_id', state.area_id)
+  formData.append('ktp_file', state.ktp_file)
+
   loading.value = true
-  register(state)
+  register(formData)
     .then(async (res) => {
       // console.log(res)
 
