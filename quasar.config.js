@@ -195,7 +195,7 @@ module.exports = configure(function (ctx) {
     capacitor: {
       hideSplashscreen: true,
       // backButtonExit: false,
-      appName: 'Aplikasi 07',
+      appName: 'com.tresno.constituent.app',
       version: appVersion
     },
 
