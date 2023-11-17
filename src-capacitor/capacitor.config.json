@@ -2,8 +2,12 @@
   "appId": "org.tresno.constituent.app",
   "appName": "Aplikasi 07 Quasar Mobile",
   "webDir": "www",
+  "plugins": {
+    "SplashScreen": {
+      "androidScaleType": "CENTER_CROP"
+    }
+  },
   "server": {
-    "androidScheme": "https",
-    "url": "http://192.168.6.29:8001"
+    "androidScheme": "https"
   }
 }
