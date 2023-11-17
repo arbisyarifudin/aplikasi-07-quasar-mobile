@@ -13,6 +13,7 @@ const { configure } = require('quasar/wrappers')
 const deployMode = process.env.DEPLOY_MODE ?? 'development' // development | production
 
 const apiURLDevelopment = 'http://192.168.6.29:8000/api/'
+// const apiURLDevelopment = 'http://54.255.227.58:8000/api/'
 const apiURLProduction = deployMode === 'development' ? 'http://54.255.227.58:8000/api/' : 'http://54.255.227.58:8000/api/'
 
 const appVersionAndroid = '1.0.0'
@@ -21,6 +22,7 @@ const appVersionIOS = '1.0.0'
 module.exports = configure(function (ctx) {
   console.log('DEV MODE', ctx.dev)
   console.log('DEPLOY MODE:', deployMode)
+  console.log('API_URL', ctx.dev ? apiURLDevelopment : apiURLProduction)
 
   const isCapacitorMode = ctx.mode.capacitor
   // console.log('CAPACITOR MODE', isCapacitorMode)
