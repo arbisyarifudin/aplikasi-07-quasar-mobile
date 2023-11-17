@@ -43,14 +43,18 @@
     </q-page-container>
 
     <BottomMenu :items="[]" />
+
+    <UpdateInfoDialog :show="isUpdateAvailable" />
   </q-layout>
 </template>
 
 <script setup>
-import { ref, watch } from 'vue'
-
 import SidebarMenu from 'components/menu/SidebarMenu.vue'
 import BottomMenu from 'components/menu/BottomMenu.vue'
+import UpdateInfoDialog from 'components/UI/UpdateInfoDialog.vue'
+
+import { computed, ref, watch } from 'vue'
+
 import { LocalStorage, useQuasar } from 'quasar'
 import { api } from 'src/boot/axios'
 import { useRoute, useRouter } from 'vue-router'
@@ -115,6 +119,11 @@ const checkRouteName = () => {
 }
 
 checkRouteName()
+
+/* CHECK UPDATE */
+const isUpdateAvailable = computed(() => {
+  return globalStore.isUpdateAvailable
+})
 
 </script>
 

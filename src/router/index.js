@@ -2,7 +2,7 @@ import { route } from 'quasar/wrappers'
 import { createRouter, createMemoryHistory, createWebHistory, createWebHashHistory } from 'vue-router'
 import routes from './routes'
 
-import { useMeta, useQuasar } from 'quasar'
+import { Platform, /* useMeta, */ useQuasar } from 'quasar'
 import middlewarePipeline from './middleware-pipeline'
 
 import { useGlobalStore } from 'src/stores/global-store'
@@ -35,7 +35,7 @@ export default route(function (/* { store, ssrContext } */) {
   const globalStore = useGlobalStore()
 
   // Add a navigation guard that executes before any navigation.
-  Router.beforeEach((to, from, next) => {
+  Router.beforeEach(async (to, from, next) => {
     // globalStore.setLoadingState(true)
 
     const $q = useQuasar()
@@ -44,12 +44,23 @@ export default route(function (/* { store, ssrContext } */) {
     $q.dark.set(true)
 
     // use quasar meta
-    useMeta({
-      // sets document title
-      title: to.meta.title || 'Selamat datang',
-      // optional; sets final title as "Index Page - My Website", useful for multiple level meta
-      titleTemplate: (title) => `${title} - Aplikasi07`
-    })
+    // useMeta({
+    //   // sets document title
+    //   title: to.meta.title || 'Selamat datang',
+    //   // optional; sets final title as "Index Page - My Website", useful for multiple level meta
+    //   titleTemplate: (title) => `${title} - Aplikasi07`
+    // })
+
+    // get quasar platform info
+    console.log('Platform', Platform.is)
+    const platform = Platform.is?.mobile ? Platform.is.platform : ''
+
+    const globalStore = useGlobalStore()
+    const isUpdateAvailable = globalStore.isUpdateAvailable
+    if (isUpdateAvailable === null) {
+      // check app version
+      await globalStore.checkAvaiableUpdate({ platform })
+    }
 
     // run the middleware(s)
     if (!to.meta.middleware) return next()
