@@ -74,7 +74,8 @@ const logout = () => {
     title: 'Logout',
     message: 'Are you sure you want to logout?',
     cancel: true,
-    persistent: true
+    persistent: true,
+    color: 'negative'
   }).onOk(() => {
     console.log('logout')
 
