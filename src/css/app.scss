@@ -298,3 +298,12 @@ body {
 
   }
 }
+
+.q-field {
+  &--disabled {
+    cursor: not-allowed;
+    .q-field__control {
+      background-color: #323232;
+    }
+  }
+}

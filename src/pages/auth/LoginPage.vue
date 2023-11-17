@@ -21,7 +21,7 @@
                 <q-input id="uid" v-model="state.uid" outlined dense type="uid"
                   placeholder="Masukkan NIK / No. HP"
                   :rules="[(val) => val.length > 0 || 'NIK / No HP diperlukan']"
-                  :error="errorState?.uid?.length > 0" :error-message="errorState?.uid" :autofocus="true"
+                  :error="errorState?.uid?.length > 0" :error-message="errorState?.uid" :autofocus="false"
                   @update:model-value="errorState.uid = ''" hide-bottom-space />
               </div>
               <div class="q-mb-md">

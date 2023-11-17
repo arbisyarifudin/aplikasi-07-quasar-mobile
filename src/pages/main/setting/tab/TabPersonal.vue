@@ -16,11 +16,18 @@
       </div>
     </div>
     <div class="q-mb-sm">
+      <label for="user_uname" class="text-h6 text-semibold q-mb-sm block">ID
+      </label>
+      <q-input id="user_uname" uname="user_uname" v-model="state.uname" placeholder="NIK" outlined
+        :error="errState?.uname?.length > 0" :error-message="errState?.uname" @update:model-value="errState.uname = ''"
+        hide-bottom-space readonly disable />
+    </div>
+    <div class="q-mb-sm">
       <label for="user_name" class="text-h6 text-semibold q-mb-sm block">Nama lengkap
       </label>
       <q-input id="user_name" name="user_name" v-model="state.name" placeholder="Nama lengkap" outlined
         :error="errState?.name?.length > 0" :error-message="errState?.name" @update:model-value="errState.name = ''"
-        hide-bottom-space readonly disable />
+        hide-bottom-space />
     </div>
     <div class="q-mb-sm">
       <label for="user_nik" class="text-h6 text-semibold q-mb-sm block">NIK
@@ -82,6 +89,7 @@ const $q = useQuasar()
 const isEditMode = ref(false)
 
 const state = ref({
+  uname: '',
   name: '',
   email: '',
   phone: '',
@@ -89,6 +97,7 @@ const state = ref({
 })
 
 const errState = ref({
+  uname: '',
   name: '',
   email: '',
   phone: '',
@@ -97,12 +106,14 @@ const errState = ref({
 
 const onReset = () => {
   state.value = {
+    uname: '',
     name: '',
     email: '',
     phone: '',
     address: ''
   }
   errState.value = {
+    uname: '',
     name: '',
     email: '',
     phone: '',
@@ -157,6 +168,7 @@ const getPersonalInfo = async () => {
   await getAPI('v1/user/profile')
     .then((res) => {
       state.value = {
+        uname: res.data.uname,
         name: res.data.name,
         email: res.data.email,
         nik: res.data.profile?.nik,
