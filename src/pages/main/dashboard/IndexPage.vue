@@ -43,7 +43,7 @@
             <div class="text-h4 text-semibold">Total Konstituen</div>
           </div>
           <div class="flex items-center">
-            <div class="text-h1 text-bold text-primary">0</div>
+            <div class="text-h1 text-bold text-primary">{{ summaryData?.total_constituent }}</div>
             <div class="text-h4 q-ml-sm">orang</div>
           </div>
           <div class="text-small text-semibold text-grey-6">
@@ -53,11 +53,23 @@
       </div>
     </div>
 
-    <div class="q-mt-lg">
+    <div class="q-mt-lg hidden">
       <div class="text-h4 text-semibold q-mb-md">Aktivitas Terakhir</div>
-    </div>
 
-    <div class=""></div>
+        <div class="q-px-lg q-py-md">
+          <q-timeline color="primary">
+            <q-timeline-entry>
+              <template v-slot:title>
+                <div class="text-h6 text-medium">Aktifitas 1</div>
+              </template>
+              <template v-slot:subtitle>
+                <div class="text-small text-grey-6">20 Feb 2023, 10:12</div>
+              </template>
+            </q-timeline-entry>
+          </q-timeline>
+        </div>
+
+    </div>
 
   </q-page>
 </template>
@@ -93,11 +105,30 @@
 
 <script setup>
 import { LocalStorage } from 'quasar'
-import { computed } from 'vue'
+import { api } from 'src/boot/axios'
+import { computed, onMounted, ref } from 'vue'
 
 /* USER PROFILE */
 const userProfile = computed(() => {
   return LocalStorage.getItem('app_auth_user')
 })
+
+/* DATA */
+const summaryData = ref({
+  total_constituent: 0
+})
+
+onMounted(() => {
+  api.get('v1/statistic/summary')
+    .then(res => {
+      console.log(res)
+      summaryData.value = res.data?.data || {}
+    })
+    .catch(err => {
+      console.log(err)
+    })
+})
+
+// const activityData = ref([])
 
 </script>
