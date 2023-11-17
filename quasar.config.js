@@ -12,8 +12,8 @@ const { configure } = require('quasar/wrappers')
 
 const deployMode = process.env.DEPLOY_MODE ?? 'development' // development | production
 
-const apiURLDevelopment = 'http://localhost:8000/api/'
-const apiURLProduction = deployMode === 'development' ? 'https://api-dev.domain.id/' : 'https://api.domain.id/'
+const apiURLDevelopment = 'http://192.168.6.29:8000/api/'
+const apiURLProduction = deployMode === 'development' ? 'http://54.255.227.58:8000/api/' : 'http://54.255.227.58:8000/api/'
 
 module.exports = configure(function (ctx) {
   console.log('DEV MODE', ctx.dev)
@@ -36,7 +36,8 @@ module.exports = configure(function (ctx) {
     // https://v2.quasar.dev/quasar-cli-vite/boot-files
     boot: [
       'axios',
-      'ph-icons'
+      'ph-icons',
+      'capacitor'
     ],
 
     // https://v2.quasar.dev/quasar-cli-vite/quasar-config-js#css

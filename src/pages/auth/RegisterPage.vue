@@ -19,52 +19,64 @@
                 <label for="name" class="block q-mb-sm text-small text-semibold">Nama Lengkap <span
                     class="text-primary">*</span></label>
                 <q-input id="name" v-model="state.name" outlined dense type="text" placeholder="Masukkan nama lengkap"
-                  :rules="[(val) => val.length > 0 || 'Nama lengkap diperlukan']" :error="errorState?.name?.length > 0"
-                  :error-message="errorState?.name" :autofocus="true" @update:model-value="errorState.name = ''"
-                  hide-bottom-space />
+                  :error="errorState?.name?.length > 0" :error-message="errorState?.name" :autofocus="false"
+                  @update:model-value="errorState.name = ''" hide-bottom-space />
               </div>
               <div class="q-mb-md">
                 <label for="nik" class="block q-mb-sm text-small text-semibold">NIK <span
                     class="text-primary">*</span></label>
                 <q-input id="nik" v-model="state.nik" outlined dense type="number" placeholder="Masukkan NIK"
-                  :rules="[(val) => val.length > 0 || 'NIK diperlukan']" :error="errorState?.nik?.length > 0"
-                  :error-message="errorState?.nik" @update:model-value="errorState.nik = ''" hide-bottom-space />
+                  :error="errorState?.nik?.length > 0" :error-message="errorState?.nik"
+                  @update:model-value="errorState.nik = ''" hide-bottom-space />
               </div>
               <div class="q-mb-md">
                 <label for="ktp_file" class="block q-mb-sm text-small text-semibold">Foto KTP <span
                     class="text-primary">*</span></label>
                 <!-- <q-input id="ktp_file" v-model="state.ktp_file" outlined dense type="file" :error="errorState?.ktp_file?.length > 0" :error-message="errorState?.ktp_file" @update:model-value="errorState.ktp_file = ''" hide-bottom-space /> -->
-                <q-file v-model="state.ktp_file" outlined dense :error="errorState?.ktp_file?.length > 0"
-                  :error-message="errorState?.ktp_file" @update:model-value="errorState.ktp_file = ''" hide-bottom-space accept=".jpg,.jpeg,.png,.pdf"
-                  counter>
+                <!-- <q-file v-model="state.ktp_file" outlined dense :error="errorState?.ktp_file?.length > 0"
+                  :error-message="errorState?.ktp_file" @update:model-value="errorState.ktp_file = ''" hide-bottom-space
+                  accept=".jpg,.jpeg,.png,.pdf" counter>
                   <template v-slot:prepend>
                     <q-icon name="attach_file" />
                   </template>
-                </q-file>
+                </q-file> -->
+                <q-card>
+                  <q-card-section v-if="capturedImageUrl">
+                    <q-img :src="capturedImageUrl" class="image-captured" />
+                  </q-card-section>
+                  <q-card-section>
+                    <q-btn outlined color="grey-9" text-color="white" class="full-width" @click="captureImage">
+                      <ph-icon name="Camera" />
+                    </q-btn>
+                    <div class="q-mt-sm text-center text-caption">Klik untuk ambil foto KTP</div>
+                    <div class="q-mt-sm text-center text-small text-negative q-mt-sm" v-if="errorState.ktp_file?.length">
+                      {{ errorState.ktp_file }}</div>
+                  </q-card-section>
+                </q-card>
+
               </div>
               <div class="q-mb-md">
                 <label for="phone" class="block q-mb-sm text-small text-semibold">No. HP <span
                     class="text-primary">*</span></label>
                 <q-input id="phone" v-model="state.phone" outlined dense type="number" placeholder="Masukkan No. HP"
-                  :rules="[(val) => val.length > 0 || 'No. HP diperlukan']" :error="errorState?.phone?.length > 0"
-                  :error-message="errorState?.phone" @update:model-value="errorState.phone = ''" hide-bottom-space />
+                  :error="errorState?.phone?.length > 0" :error-message="errorState?.phone"
+                  @update:model-value="errorState.phone = ''" hide-bottom-space />
               </div>
               <div class="q-mb-md">
                 <label for="address" class="block q-mb-sm text-small text-semibold">Alamat Domisili <span
                     class="text-primary">*</span></label>
                 <q-input id="address" autogrow v-model="state.address" outlined dense type="textarea"
-                  placeholder="Masukkan Alamat" :rules="[(val) => val.length > 0 || 'Alamat diperlukan']"
-                  :error="errorState?.address?.length > 0" :error-message="errorState?.address"
-                  @update:model-value="errorState.address = ''" hide-bottom-space input-style="min-height: 70px" />
+                  placeholder="Masukkan Alamat" :error="errorState?.address?.length > 0"
+                  :error-message="errorState?.address" @update:model-value="errorState.address = ''" hide-bottom-space
+                  input-style="min-height: 70px" />
               </div>
               <div class="q-mb-md">
                 <label for="password" class="block q-mb-sm text-small text-semibold">Kata Sandi <span
                     class="text-primary">*</span></label>
                 <q-input v-model="state.password" outlined dense :type="showPassword ? 'text' : 'password'"
-                  placeholder="Masukkan kata sandi" :rules="[(val) => val.length > 0 || 'Kata sandi diperlukan']"
-                  :error="errorState?.password?.length > 0" :error-message="errorState?.password"
-                  @update:model-value="errorState.password = ''" hide-bottom-space autocomplete="new-password"
-                  hint="Minimal 6 karakter">
+                  placeholder="Masukkan kata sandi" :error="errorState?.password?.length > 0"
+                  :error-message="errorState?.password" @update:model-value="errorState.password = ''" hide-bottom-space
+                  autocomplete="new-password" hint="Minimal 6 karakter">
                   <template #append>
                     <q-icon :name="showPassword ? 'o_visibility_off' : 'o_visibility'" class="cursor-pointer"
                       @click="showPassword = !showPassword" />
@@ -72,21 +84,68 @@
                 </q-input>
               </div>
               <div class="q-mb-md">
-                <label for="area_id" class="block q-mb-sm text-small text-semibold">Wilayah Kerja <span
+                <div class="text-semibold">Wilayah Kerja</div>
+                <div class="text-caption">
+                  Pilih wilayah kerja Anda sesuai dengan penugasan yang telah ditentukan oleh Pusat
+                </div>
+              </div>
+              <div class="q-mb-md">
+                <label for="regency_id" class="block q-mb-sm text-small text-semibold">Kabupaten <span
                     class="text-primary">*</span></label>
-                <q-select id="area_id" v-model="state.area_id" :options="areaOptions" emit-value map-options
-                  :loading="areaLoading" outlined dense type="area_id" :error="errorState?.area_id?.length > 0"
-                  :error-message="errorState?.area_id" @update:model-value="errorState.area_id = ''"
-                  @filter="onFilterArea" @virtual-scroll="onScrollArea" use-input hide-selected fill-input
-                  input-debounce="300" hint="Cari wilayah" hide-bottom-space>
-                  <template v-slot:no-option>
-                    <q-item>
-                      <q-item-section class="text-grey">
-                        Tidak ada data.
-                      </q-item-section>
-                    </q-item>
-                  </template>
-                </q-select>
+                <q-select id="regency_id" v-model="state.regency_id" :options="regencyOptions" emit-value map-options
+                  :loading="regencyLoading" outlined dense type="regency_id" :error="errorState?.regency_id?.length > 0"
+                  :error-message="errorState?.regency_id" input-debounce="300" hide-bottom-space
+                  @update:model-value="onRegencyChange" />
+              </div>
+              <div class="q-mb-md" v-if="state.regency_id">
+                <label for="district_id" class="block q-mb-sm text-small text-semibold">Kecamatan <span
+                    class="text-primary">*</span></label>
+                <q-select id="district_id" v-model="state.district_id" :options="districtOptions" emit-value map-options
+                  :loading="districtLoading" outlined dense type="district_id"
+                  :error="errorState?.district_id?.length > 0" :error-message="errorState?.district_id"
+                  input-debounce="300" hide-bottom-space @update:model-value="onDistrictChange" />
+              </div>
+              <div class="q-mb-md" v-if="state.district_id">
+                <label for="village_id" class="block q-mb-sm text-small text-semibold">Kalurahan <span
+                    class="text-primary">*</span></label>
+                <q-select id="village_id" v-model="state.village_id" :options="villageOptions" emit-value map-options
+                  :loading="villageLoading" outlined dense type="village_id" :error="errorState?.village_id?.length > 0"
+                  :error-message="errorState?.village_id" input-debounce="300" hide-bottom-space
+                  @update:model-value="onVillageChange" />
+              </div>
+              <div class="q-mb-md" v-if="state.village_id">
+                <label for="subvillage_id" class="block q-mb-sm text-small text-semibold">Dusun <span
+                    class="text-primary">*</span></label>
+                <q-select :disable="!subvillageOptions.length" id="subvillage_id" v-model="state.subvillage_id"
+                  :options="subvillageOptions" emit-value map-options :loading="subvillageLoading" outlined dense
+                  type="subvillage_id" :error="errorState?.subvillage_id?.length > 0"
+                  :error-message="errorState?.subvillage_id" input-debounce="300" hide-bottom-space
+                  @update:model-value="onSubvillageChange" />
+
+                <div class="q-mt-sm alert-info q-py-sm" v-if="!subvillageLoading && !subvillageOptions.length">
+                  Dusun untuk Kalurahan ini belum tersedia. Silahkan tambahkan dengan mengisi form di
+                  bawah:
+                </div>
+                <div class="q-mt-sm alert-info q-py-sm" v-else-if="!subvillageLoading && subvillageOptions.length">
+                  <span class="text-success" v-if="newlySubvillageAdded">Dusun berhasil ditambahkan untuk
+                    kalurahan ini.</span>
+                  <span v-else>Jika dusun yang Anda cari tidak ada di daftar, silahkan tambahkan dengan
+                    mengisi form di
+                    bawah:</span>
+                </div>
+
+                <div class="q-mt-sm row items-center justify-start">
+                  <div class="col-12">
+                    <q-input v-model="state.subvillage_name" outlined dense type="text" placeholder="Masukkan nama dusun"
+                      hide-bottom-space />
+                  </div>
+                  <div class="col-12 hidden">
+                    <q-btn color="primary" text-color="dark" no-caps class="q-ml-sm">
+                      <ph-icon name="FloppyDisk" /> Tambah
+                    </q-btn>
+                  </div>
+                </div>
+
               </div>
               <q-btn class="q-mt-md full-width q-py-sm" color="primary" text-color="dark" label="Buat Akun" no-caps
                 :loading="loading" :disable="loading" type="submit" />
@@ -108,62 +167,84 @@
 </template>
 
 <script setup>
-import { LocalStorage, useQuasar } from 'quasar'
+import { LocalStorage, useQuasar, Platform } from 'quasar'
 import { register } from 'src/services/auth.service'
-import { onMounted, reactive, ref } from 'vue'
+import { onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { mapErrorMessage } from 'src/utils/error'
 import { api } from 'src/boot/axios'
 
+import { Camera } from '@capacitor/camera'
+
 const $q = useQuasar()
 const $router = useRouter()
 
-const state = reactive({
+const state = ref({
   name: '',
   nik: '',
   phone: '',
   password: '',
   address: '',
-  area_id: '',
+  // area_id: '',
+  regency_id: '',
+  district_id: '',
+  village_id: '',
+  subvillage_id: '',
+  subvillage_name: '',
   ktp_file: null
 })
 
-const errorState = reactive({
+const errorState = ref({
   name: '',
   nik: '',
   phone: '',
   password: '',
   address: '',
-  area_id: '',
+  // area_id: '',
+  regency_id: '',
+  district_id: '',
+  village_id: '',
+  subvillage_id: '',
+  subvillage_name: '',
   ktp_file: ''
 })
 
 const showPassword = ref(false)
 const loading = ref(false)
 
-const onSubmit = () => {
-  console.log(state)
+const onSubmit = async () => {
+  console.log(state.value)
 
   // reset error state
-  Object.assign(errorState, {
+  Object.assign(errorState.value, {
     name: '',
     nik: '',
     phone: '',
     password: '',
     address: '',
-    area_id: '',
+    // area_id: '',
+    regency_id: '',
+    district_id: '',
+    village_id: '',
+    subvillage_id: '',
+    subvillage_name: '',
     ktp_file: ''
   })
 
   // form data
   const formData = new FormData()
-  formData.append('name', state.name)
-  formData.append('nik', state.nik)
-  formData.append('phone', state.phone)
-  formData.append('password', state.password)
-  formData.append('address', state.address)
-  formData.append('area_id', state.area_id)
-  formData.append('ktp_file', state.ktp_file)
+  formData.append('name', state.value.name)
+  formData.append('nik', state.value.nik)
+  formData.append('phone', state.value.phone)
+  formData.append('password', state.value.password)
+  formData.append('address', state.value.address)
+  // formData.append('area_id', state.area_id)
+  formData.append('regency_id', state.value.regency_id)
+  formData.append('district_id', state.value.district_id)
+  formData.append('village_id', state.value.village_id)
+  formData.append('subvillage_id', state.value.subvillage_id)
+  formData.append('subvillage_name', state.value.subvillage_name)
+  formData.append('ktp_file', state.value.ktp_file ?? '')
 
   loading.value = true
   register(formData)
@@ -188,9 +269,16 @@ const onSubmit = () => {
     .catch((err) => {
       console.log(err)
       if (err.status === 422) {
-        Object.assign(errorState, mapErrorMessage(err.data.errors))
+        Object.assign(errorState.value, mapErrorMessage(err.data.errors))
+        $q.notify({
+          message: 'Input tidak valid. Periksa kembali data Anda.',
+          color: 'negative',
+          position: 'top',
+          icon: 'error',
+          timeout: 2000
+        })
       } else if (err.status === 401) {
-        errorState.password = err.data.message
+        errorState.value.password = err.data.message
       } else {
         // show alert error
         $q.notify({
@@ -207,127 +295,171 @@ const onSubmit = () => {
     })
 }
 
-/* AREA */
+/* CAMERA (capacitor/ionic) */
+const capturedImageUrl = ref(null)
+async function captureImage () {
+  // const check = await Camera.checkPermissions()
+  // console.log('check', check)
 
-const areaData = ref([])
-const areaOptions = ref([])
-const areaLoading = ref(false)
-const searchAreaKeyword = ref('')
-const paginationArea = ref({
-  page: 1,
-  perPage: 10,
-  totalPage: 1
-})
-
-const getAreaData = async (append = false) => {
-  // areaOptions.value = []
-  areaLoading.value = true
-  api
-    .get('v1/area', {
-      params: {
-        keyword: searchAreaKeyword.value,
-        page: paginationArea.value.page,
-        limit: 20,
-        sortBy: 'name',
-        sortDir: 'asc'
-      }
-    })
-    .then((res) => {
-      const responseData = res.data?.data?.data || []
-      const responsePagination = res.data?.data?.pagination || {}
-
-      areaData.value = responseData
-
-      paginationArea.value.page = parseInt(responsePagination.current_page)
-      paginationArea.value.totalPage = responsePagination.total_pages
-
-      if (append) {
-        if (searchAreaKeyword.value && !areaData.value.length) {
-          areaOptions.value = responseData.map(item => {
-            return {
-              label: item.name,
-              value: item.id
-            }
-          })
-        } else {
-          areaOptions.value.push(...responseData.map(item => {
-            return {
-              label: item.name,
-              value: item.id
-            }
-          }))
-        }
-      } else {
-        areaOptions.value = responseData.map(item => {
-          return {
-            label: item.name,
-            value: item.id
-          }
-        })
-        if (responseData && responseData.length > 0) {
-          areaOptions.value.unshift({
-            label: '- Pilih Wilayah Kerja -',
-            value: ''
-          })
-        }
-      }
-    })
-    .catch((error) => {
-      console.log(error)
-    })
-    .finally(() => {
-      areaLoading.value = false
-    })
-}
-
-const onFilterArea = (val, update) => {
-  if (val === '') {
-    update(() => {
-      areaOptions.value = areaData.value.map(item => {
-        return {
-          label: item.name,
-          value: item.id
-        }
+  if (Platform.is.nativeMobile) {
+    try {
+      const request = await Camera.requestPermissions({
+        permissions: ['camera']
       })
-      // here you have access to "ref" which
-      // is the Vue reference of the QSelect
-    })
-    return
+      console.log('requestPermissions', JSON.stringify(request))
+    } catch (error) {
+      console.log('error requestPermissions', JSON.stringify(error))
+    }
   }
 
-  update(() => {
-    const needle = val.toLowerCase()
-    const filterData = areaData.value.filter(v => {
-      return v.name.toLowerCase().indexOf(needle) > -1
-    })
-      .map(item => {
-        return {
-          label: item.name,
-          value: item.id
-        }
-      })
-
-    if (filterData.length > 0) {
-      areaOptions.value = filterData
-    } else {
-      searchAreaKeyword.value = needle
-      getAreaData(true)
-    }
+  const image = await Camera.getPhoto({
+    quality: 100,
+    allowEditing: false,
+    saveToGallery: false,
+    // webUseInput: true,
+    source: 'CAMERA',
+    resultType: 'uri'
+    // direction: CameraDirection.Rear,
+    // resultType: CameraResultType.Uri
+    // resultType: CameraResultType.Base64
+    // resultType: CameraResultType.DataUrl
   })
+
+  // The result will vary on the value of the resultType option.
+  // CameraResultType.Uri - Get the result from image.webPath
+  // CameraResultType.Base64 - Get the result from image.base64String
+  // CameraResultType.DataUrl - Get the result from image.dataUrl
+  // console.log('image', JSON.stringify(image))
+  // console.log('image.webPath', JSON.stringify(image.webPath))
+  // console.log('image.base64String', JSON.stringify(image.base64String))
+  // console.log('image.dataUrl', JSON.stringify(image.dataUrl))
+
+  capturedImageUrl.value = image.webPath
+
+  const blob = await convertImagePathToBlob(image.webPath)
+  state.value.ktp_file = blob
 }
 
-const onScrollArea = (detail) => {
-  // console.log('onScrollArea', detail)
-  if (detail.direction === 'increase' && !searchAreaKeyword.value) {
-    if (detail.index === detail.to && paginationArea.value.page < paginationArea.value.totalPage) {
-      paginationArea.value.page++
-      getAreaData(true)
-    }
+const convertImagePathToBlob = async (image) => {
+  const response = await fetch(image)
+  const blob = await response.blob()
+  return blob
+}
+
+/* AREA */
+const regencyLoading = ref(false)
+const regencyOptions = ref([])
+const districtLoading = ref(false)
+const districtOptions = ref([])
+const villageLoading = ref(false)
+const villageOptions = ref([])
+const subvillageLoading = ref(false)
+const subvillageOptions = ref([])
+
+const getRegency = async () => {
+  errorState.value.regency_id = ''
+  regencyLoading.value = true
+  try {
+    const res = await api.get('/regency')
+    regencyOptions.value = res.data.data.map((item) => ({
+      label: item.name,
+      value: item.id
+    }))
+  } catch (err) {
+    console.log(err)
+  } finally {
+    regencyLoading.value = false
   }
 }
+
 onMounted(() => {
-  getAreaData()
+  getRegency()
 })
+
+const getDistrict = async (regencyId) => {
+  districtLoading.value = true
+  try {
+    const res = await api.get(`/district?regency_id=${regencyId}`)
+    districtOptions.value = res.data.data.map((item) => ({
+      label: item.name,
+      value: item.id
+    }))
+  } catch (err) {
+    console.log(err)
+  } finally {
+    districtLoading.value = false
+  }
+}
+
+const getVillage = async (districtId) => {
+  villageLoading.value = true
+  try {
+    const res = await api.get(`/village?district_id=${districtId}`)
+    villageOptions.value = res.data.data.map((item) => ({
+      label: item.name,
+      value: item.id
+    }))
+  } catch (err) {
+    console.log(err)
+  } finally {
+    villageLoading.value = false
+  }
+}
+
+const getSubvillage = async (villageId) => {
+  subvillageLoading.value = true
+  try {
+    const res = await api.get(`/subvillage?village_id=${villageId}`)
+    subvillageOptions.value = res.data.data.map((item) => ({
+      label: item.name,
+      value: item.id
+    }))
+  } catch (err) {
+    console.log(err)
+  } finally {
+    subvillageLoading.value = false
+  }
+}
+
+const onRegencyChange = (val) => {
+  state.value.district_id = ''
+  state.value.village_id = ''
+  state.value.subvillage_id = ''
+
+  errorState.value.district_id = ''
+  districtOptions.value = []
+  errorState.value.village_id = ''
+  villageOptions.value = []
+  errorState.value.subvillage_id = ''
+  subvillageOptions.value = []
+  getDistrict(val)
+}
+
+const onDistrictChange = (val) => {
+  state.value.village_id = ''
+  state.value.subvillage_id = ''
+
+  errorState.value.village_id = ''
+  villageOptions.value = []
+  errorState.value.subvillage_id = ''
+  subvillageOptions.value = []
+  getVillage(val)
+}
+
+const onVillageChange = (val) => {
+  state.value.subvillage_id = ''
+
+  errorState.value.subvillage_id = ''
+  errorState.value.subvillage_name = ''
+  subvillageOptions.value = []
+  getSubvillage(val)
+}
+
+const onSubvillageChange = (val) => {
+  console.log(val)
+}
+
+const newlySubvillageAdded = ref(false)
 
 </script>
 
