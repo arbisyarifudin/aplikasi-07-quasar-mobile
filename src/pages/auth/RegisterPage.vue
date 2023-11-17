@@ -174,6 +174,8 @@ import { useRouter } from 'vue-router'
 import { mapErrorMessage } from 'src/utils/error'
 import { api } from 'src/boot/axios'
 
+// import { Plugins } from '@capacitor/core'
+// const { Camera } = Plugins
 import { Camera } from '@capacitor/camera'
 
 const $q = useQuasar()
@@ -312,32 +314,35 @@ async function captureImage () {
     }
   }
 
-  const image = await Camera.getPhoto({
-    quality: 100,
-    allowEditing: false,
-    saveToGallery: false,
-    // webUseInput: true,
-    source: 'CAMERA',
-    resultType: 'uri'
-    // direction: CameraDirection.Rear,
-    // resultType: CameraResultType.Uri
-    // resultType: CameraResultType.Base64
-    // resultType: CameraResultType.DataUrl
-  })
+  try {
+    const image = await Camera.getPhoto({
+      quality: 100,
+      allowEditing: false,
+      saveToGallery: false,
+      // webUseInput: true,
+      source: 'CAMERA',
+      resultType: 'uri'
+      // direction: CameraDirection.Rear,
+      // resultType: CameraResultType.Uri
+      // resultType: CameraResultType.Base64
+      // resultType: CameraResultType.DataUrl
+    })
 
-  // The result will vary on the value of the resultType option.
-  // CameraResultType.Uri - Get the result from image.webPath
-  // CameraResultType.Base64 - Get the result from image.base64String
-  // CameraResultType.DataUrl - Get the result from image.dataUrl
-  // console.log('image', JSON.stringify(image))
-  // console.log('image.webPath', JSON.stringify(image.webPath))
-  // console.log('image.base64String', JSON.stringify(image.base64String))
-  // console.log('image.dataUrl', JSON.stringify(image.dataUrl))
+    // The result will vary on the value of the resultType option.
+    // CameraResultType.Uri - Get the result from image.webPath
+    // CameraResultType.Base64 - Get the result from image.base64String
+    // CameraResultType.DataUrl - Get the result from image.dataUrl
+    // console.log('image', JSON.stringify(image))
+    // console.log('image.webPath', JSON.stringify(image.webPath))
+    // console.log('image.base64String', JSON.stringify(image.base64String))
+    // console.log('image.dataUrl', JSON.stringify(image.dataUrl))
+    capturedImageUrl.value = image.webPath
 
-  capturedImageUrl.value = image.webPath
-
-  const blob = await convertImagePathToBlob(image.webPath)
-  state.value.ktp_file = blob
+    const blob = await convertImagePathToBlob(image.webPath)
+    state.value.ktp_file = blob
+  } catch (error) {
+    console.log('getPhoto error', JSON.stringify(error))
+  }
 }
 
 const convertImagePathToBlob = async (image) => {
