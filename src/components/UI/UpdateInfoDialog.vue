@@ -2,10 +2,13 @@
   <q-dialog :model-value="show" persistent>
     <q-card style="width: 600px; max-width: 100%;" class="dialog-update">
       <q-card-section class="dialog-update__header">
-        <span class="title">Update available</span>
+        <span class="title">Update Aplikasi</span>
       </q-card-section>
       <q-separator />
       <q-card-section class="dialog-update__content">
+        <div class="text-caption">
+          <span>Versi terbaru telah tersedia. Silahkan update aplikasi untuk mendapatkan fitur terbaru dan/atau perbaikan bug.</span>
+        </div>
         <div class="item">
           <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" fill="none">
             <g clip-path="url(#clip0_15018_36718)">
