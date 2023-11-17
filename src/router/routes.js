@@ -134,14 +134,14 @@ const routes = [
         },
         component: () => import('pages/main/tps/IndexPage.vue')
       },
-      {
-        path: 'tps/select-polling',
-        name: 'TPS Select Polling Page',
-        meta: {
-          title: 'Pilih Pemilihan Umum'
-        },
-        component: () => import('pages/main/tps/SelectPollingPage.vue')
-      },
+      // {
+      //   path: 'tps/select-polling',
+      //   name: 'TPS Select Polling Page',
+      //   meta: {
+      //     title: 'Pilih Pemilihan Umum'
+      //   },
+      //   component: () => import('pages/main/tps/SelectPollingPage.vue')
+      // },
       {
         path: 'tps/select-area',
         name: 'TPS Select Area Page',

@@ -84,11 +84,11 @@
           </div>
         </div>
         <div class="col-md-6 col-12" v-if="$q.screen.gt.sm">
-          <img
+          <!-- <img
             class="image-login"
             src="~/assets/banner-login.png"
             alt="login"
-          />
+          /> -->
         </div>
       </div>
     </div>
