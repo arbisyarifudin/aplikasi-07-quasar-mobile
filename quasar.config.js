@@ -12,7 +12,7 @@ const { configure } = require('quasar/wrappers')
 
 const deployMode = process.env.DEPLOY_MODE ?? 'development' // development | production
 
-const apiURLDevelopment = 'http://192.168.6.29:8000/api/'
+const apiURLDevelopment = 'http://192.168.143.29:8000/api/'
 // const apiURLDevelopment = 'http://54.255.227.58:8000/api/'
 const apiURLProduction = deployMode === 'development' ? 'http://54.255.227.58:8000/api/' : 'http://54.255.227.58:8000/api/'
 
@@ -30,6 +30,8 @@ module.exports = configure(function (ctx) {
   // console.log('TARGET NAME', targetName)
   const appVersion = isCapacitorMode && targetName === 'android' ? appVersionAndroid : (isCapacitorMode && targetName === 'ios' ? appVersionIOS : '0.0.0')
   console.log('APP_VERSION', appVersion)
+
+  const storageUrl = ctx.dev ? apiURLDevelopment.replace('api/', 'storage/') : apiURLProduction.replace('api/', 'storage/')
 
   return {
     eslint: {
@@ -91,7 +93,8 @@ module.exports = configure(function (ctx) {
       // analyze: true,
       env: {
         APP_VERSION: appVersion,
-        API_URL: ctx.dev ? apiURLDevelopment : apiURLProduction
+        API_URL: ctx.dev ? apiURLDevelopment : apiURLProduction,
+        STORAGE_URL: storageUrl
       }
       // rawDefine: {}
       // ignorePublicFolder: true,

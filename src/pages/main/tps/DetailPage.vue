@@ -81,7 +81,50 @@
       <q-separator />
       <q-card-section>
         <div class="text-semibold block">Hasil Pemilihan</div>
-        <div class="text-small text-italic q-mt-sm" v-if="!detailData.results?.length">Belum ada hasil pemilihan.</div>
+        <div class="text-small text-italic q-mt-sm" v-if="!detailData.result">Belum ada hasil pemilihan. Silakan
+          input hasil pemilihan.</div>
+        <div class="text-small text-italic q-mt-sm" v-else>Berikut adalah hasil pemilihan yang telah diinput. Anda dapat
+          mengubahnya.</div>
+        <q-separator v-if="!detailData.result" class="q-mt-md" />
+        <q-form class="q-mt-md" @submit="onSubmitForm2" @reset="onResetForm2">
+          <div class="flex justify-end">
+            <div class="text-small text-warning">*) wajib</div>
+          </div>
+          <div class="q-mb-md">
+            <label for="result_total_voters" class="text-small q-mb-sm block">Jumlah Pemilih <span class="text-warning">*</span></label>
+            <q-input v-model="state2.total_voters" type="number" id="result_total_voters" class="text-small"
+              :error-message="errorState2.total_voters" :error="errorState2.total_voters?.length > 0" outlined dense placeholder="Masukkan jumlah pemilih" />
+          </div>
+          <div class="q-mb-md">
+            <label for="result_total_voted" class="text-small q-mb-sm block">Jumlah Memilih 07 <span class="text-warning">*</span></label>
+            <q-input v-model="state2.total_voted" type="number" id="result_total_voted" class="text-small"
+              :error-message="errorState2.total_voted" :error="errorState2.total_voted?.length > 0" outlined dense placeholder="Masukkan jumlah yang memilih 07" />
+          </div>
+          <div class="q-mb-md">
+            <label for="result_c1_file" class="text-small q-mb-sm block">Unggah Foto C1 <span class="text-warning">*</span></label>
+            <q-img v-if="state2.c1_file_image" :src="state2.c1_file_image" class="q-mb-sm" style="max-height: 400px" fit />
+            <q-file v-model="state2.c1_file" id="result_c1_file" class="text-small" :error-message="errorState2.c1_file"
+              :error="errorState2.c1_file?.length > 0" outlined dense accept=".jpg,.jpeg,.png,.pdf" counter>
+              <template v-slot:prepend>
+                <q-icon name="attach_file" />
+              </template>
+            </q-file>
+          </div>
+          <div class="q-mb-md">
+            <label for="witness_note" class="text-small q-mb-sm block">Keterangan</label>
+            <q-input v-model="state2.note" type="textarea" autogrow id="witness_note" class="text-small"
+              :error-message="errorState2.note" :error="errorState2.note?.length > 0" outlined placeholder="Tulis jika ada" />
+          </div>
+
+          <div class="q-mb-md flex justify-center">
+            <q-btn type="submit" no-caps size="sm" color="primary" text-color="dark" :loading="submitLoading2"
+              :disable="submitLoading2">
+              <ph-icon name="FloppyDisk" size="16" class="q-mr-sm" />
+              <span>Simpan Hasil</span>
+            </q-btn>
+          </div>
+
+        </q-form>
       </q-card-section>
     </q-card>
   </q-page>
@@ -105,29 +148,30 @@
             <label for="witness_name" class="text-small q-mb-sm block">Nama <span class="text-warning">*</span></label>
             <q-input v-model="state1.name" type="text" id="witness_name" class="text-small"
               :error-message="errorState1.name" :error="errorState1.name?.length > 0" outlined :minlength="3"
-              :maxlength="100" autofocus />
+              :maxlength="100" autofocus placeholder="Masukkan nama" />
           </div>
           <div class="q-mb-md">
             <label for="witness_nik" class="text-small q-mb-sm block">NIK</label>
-            <q-input v-model="state1.nik" type="text" id="witness_nik" class="text-small" :error-message="errorState1.nik"
-              :error="errorState1.nik?.length > 0" outlined counter :minlength="16" :maxlength="16" />
+            <q-input v-model="state1.nik" type="number" id="witness_nik" class="text-small"
+              :error-message="errorState1.nik" :error="errorState1.nik?.length > 0" outlined counter :minlength="16"
+              :maxlength="16" placeholder="Masukkan NIK" />
           </div>
           <div class="q-mb-md">
             <label for="witness_phone" class="text-small q-mb-sm block">No. HP / WA</label>
             <q-input v-model="state1.phone" type="text" id="witness_phone" class="text-small"
               :error-message="errorState1.phone" :error="errorState1.phone?.length > 0" outlined :minlength="5"
-              :maxlength="15" />
+              :maxlength="15" placeholder="Masukkan No. HP / WA" />
           </div>
           <div class="q-mb-md">
             <label for="witness_address" class="text-small q-mb-sm block">Alamat</label>
             <q-input v-model="state1.address" type="textarea" autogrow id="witness_address" class="text-small"
               :error-message="errorState1.address" :error="errorState1.address?.length > 0" outlined :minlength="3"
-              :maxlength="255" />
+              :maxlength="255" placeholder="Masukkan alamat" />
           </div>
           <div class="q-mb-md">
             <label for="witness_note" class="text-small q-mb-sm block">Keterangan</label>
             <q-input v-model="state1.note" type="textarea" autogrow id="witness_note" class="text-small"
-              :error-message="errorState1.note" :error="errorState1.note?.length > 0" outlined />
+              :error-message="errorState1.note" :error="errorState1.note?.length > 0" outlined :minlength="3" :maxlength="255" placeholder="Tulis jika ada" />
           </div>
         </q-card-section>
         <q-separator />
@@ -165,14 +209,18 @@ const detailData = ref({
   address: '',
   note: '',
   witnesses: [],
-  results: []
+  // results: []
+  result: null
 })
 
 const resetState = () => {
   detailData.value = {
     name: '',
     address: '',
-    note: ''
+    note: '',
+    witnesses: [],
+    // results: []
+    result: null
   }
 }
 
@@ -187,6 +235,15 @@ const getDetail = async () => {
     .then(async (res) => {
       console.log('res', res)
       detailData.value = res.data.data
+
+      state2.value = JSON.parse(JSON.stringify({
+        total_voters: detailData.value.result?.total_voters,
+        total_voted: detailData.value.result?.total_voted,
+        c1_file: null,
+        c1_file_image: process.env.STORAGE_URL + detailData.value.result?.c1_file,
+        note: detailData.value.result?.note
+      }))
+
       fetchLoading.value = false
 
       getDetailArea()
@@ -322,7 +379,7 @@ const onSubmitForm1 = () => {
         if (errorResponse.status === 422) {
           errorState1.value = mapErrorMessage(errorResponse.data.errors)
         } else {
-        // show alert error
+          // show alert error
           $q.notify({
             message: errorResponse.data.message,
             color: 'negative',
@@ -354,7 +411,7 @@ const onSubmitForm1 = () => {
         if (errorResponse.status === 422) {
           errorState1.value = mapErrorMessage(errorResponse.data.errors)
         } else {
-        // show alert error
+          // show alert error
           $q.notify({
             message: errorResponse.data.message,
             color: 'negative',
@@ -423,6 +480,86 @@ const openWitnessDeleteDialog = (item) => {
         globalStore.setLoadingState(false)
       })
   })
+}
+
+/* RESULT */
+const state2 = ref({
+  total_voters: '',
+  total_voted: '',
+  c1_file: null,
+  note: ''
+})
+
+const errorState2 = ref({
+  total_voters: '',
+  total_voted: '',
+  c1_file: '',
+  note: ''
+})
+
+const onResetForm2 = () => {
+  state2.value = {
+    total_voters: '',
+    total_voted: '',
+    c1_file: null,
+    note: ''
+  }
+
+  errorState2.value = {
+    total_voters: '',
+    total_voted: '',
+    c1_file: '',
+    note: ''
+  }
+}
+
+const submitLoading2 = ref(false)
+const onSubmitForm2 = () => {
+  console.log('submit', state2.value)
+
+  // reset error
+  errorState2.value = {
+    total_voters: '',
+    total_voted: '',
+    c1_file: '',
+    note: ''
+  }
+
+  const formData = new FormData()
+  formData.append('total_voters', state2.value.total_voters || '')
+  formData.append('total_voted', state2.value.total_voted || '')
+  formData.append('c1_file', state2.value.c1_file || '')
+  formData.append('area_polling_id', $route.params.id)
+  formData.append('note', state2.value.note || '')
+  formData.append('_method', 'PUT')
+
+  submitLoading2.value = true
+  api.post('v1/area-polling-result', formData)
+    .then(async (res) => {
+      console.log('res', res)
+      showNotification('Hasil pemilihan berhasil ditambahkan', 'positive', 'check')
+      submitLoading2.value = false
+
+      // update data to detailData.witnesses
+      detailData.value.result = res.data.data
+    })
+    .catch((err) => {
+      console.log('err', err)
+      const errorResponse = err.response
+      submitLoading2.value = false
+      if (errorResponse.status === 422) {
+        errorState2.value = mapErrorMessage(errorResponse.data.errors)
+      } else {
+        // show alert error
+        $q.notify({
+          message: errorResponse.data.message,
+          color: 'negative',
+          position: 'top',
+          icon: 'error',
+          timeout: 2000
+        })
+      }
+    })
 }
 
 </script>

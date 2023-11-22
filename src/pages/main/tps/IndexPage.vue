@@ -29,7 +29,7 @@
                     <div class="">
                       <div class="text-h6 text-semibold flex items-center">
                         {{ props.row.name }}
-                        <q-btn dense flat color="grey-6" class="q-ml-sm"
+                        <q-btn dense flat color="grey-6" class="q-ml-sm hidden"
                           :to="{ name: 'TPS Detail Page', params: { id: props.row.id } }">
                           <ph-icon name="Eye" size="15"></ph-icon>
                           <q-tooltip anchor="top middle" self="bottom middle">Lihat Detail</q-tooltip>
@@ -49,6 +49,11 @@
                         <ph-icon name="X" size="15"></ph-icon>
                         <q-tooltip anchor="top middle" self="bottom middle">Hapus</q-tooltip>
                       </q-btn>
+                      <q-btn dense size="sm" color="primary" text-color="dark" no-caps class="q-px-sm q-ml-md"
+                        :to="{ name: 'TPS Detail Page', params: { id: props.row.id } }">
+                        <ph-icon name="MagnifyingGlass" size="13"></ph-icon> Detail
+                        <q-tooltip anchor="top middle" self="bottom middle">Lihat Detail</q-tooltip>
+                      </q-btn>
                     </div>
                   </div>
                 </q-card-section>
@@ -57,7 +62,8 @@
                   <div class="flex items-center justify-between text-small q-mb-sm">
                     <div class="">Alamat TPS:</div>
                     <!-- <div class="text-small text-italic">{{ props.row.address ?? '[tidak ada]' }}</div> -->
-                     <div class="text-small text-italic" style="font-size: 10px; line-height: 16px;">{{ props.row.address }}</div>
+                    <div class="text-small text-italic" style="font-size: 10px; line-height: 16px;">{{ props.row.address
+                    }}</div>
                   </div>
                   <div class="flex items-center justify-between text-small q-mb-sm">
                     <div class="">Wilayah Kerja:</div>
@@ -260,6 +266,7 @@ const globalStore = useGlobalStore()
 
 const deleteLoading = ref(false)
 
+// eslint-disable-next-line no-unused-vars
 const openDeleteDialog = (item) => {
   console.log('openDeleteDialog', item)
 
