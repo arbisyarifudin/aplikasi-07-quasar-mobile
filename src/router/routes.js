@@ -166,6 +166,14 @@ const routes = [
         },
         component: () => import('pages/main/tps/EditPage.vue')
       },
+      {
+        path: 'tps/detail/:id',
+        name: 'TPS Detail Page',
+        meta: {
+          title: 'Detail TPS'
+        },
+        component: () => import('pages/main/tps/DetailPage.vue')
+      },
 
       {
         path: 'setting',

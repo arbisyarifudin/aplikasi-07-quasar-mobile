@@ -27,16 +27,27 @@
                 <q-card-section class="column q-py-sm q-pl-lg">
                   <div class="flex items-center justify-between">
                     <div class="">
-                      <div class="text-h6 text-semibold">{{ props.row.name }}</div>
-                      <div class="text-small text-italic">Saksi: 0 orang</div>
+                      <div class="text-h6 text-semibold flex items-center">
+                        {{ props.row.name }}
+                        <q-btn dense flat color="grey-6" class="q-ml-sm"
+                          :to="{ name: 'TPS Detail Page', params: { id: props.row.id } }">
+                          <ph-icon name="Eye" size="15"></ph-icon>
+                          <q-tooltip anchor="top middle" self="bottom middle">Lihat Detail</q-tooltip>
+                        </q-btn>
+                      </div>
+                      <div class="text-small text-italic">
+                        Saksi: {{ props.row.witnesses_count }} orang
+                      </div>
                     </div>
                     <div class="flex items-center">
                       <q-btn dense flat color="info"
                         :to="{ name: 'TPS Edit Page', params: { id: props.row.id } }">
                         <ph-icon name="PencilSimple" size="15"></ph-icon>
+                        <q-tooltip anchor="top middle" self="bottom middle">Edit</q-tooltip>
                       </q-btn>
                       <q-btn dense flat color="negative" class="q-ml-sm" @click="openDeleteDialog(props.row)">
                         <ph-icon name="X" size="15"></ph-icon>
+                        <q-tooltip anchor="top middle" self="bottom middle">Hapus</q-tooltip>
                       </q-btn>
                     </div>
                   </div>

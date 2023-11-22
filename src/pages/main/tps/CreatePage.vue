@@ -132,7 +132,8 @@ const submitForm = () => {
     .then(async (res) => {
       console.log('res', res)
       showNotification('TPS berhasil ditambahkan', 'positive', 'check')
-      await $router.push({ name: 'TPS Index Page', query: { refresh: true } })
+      // await $router.push({ name: 'TPS Index Page', query: { refresh: true } })
+      await $router.push({ name: 'TPS Detail Page', params: { id: res.data.data.id } })
       submitLoading.value = false
     })
     .catch((err) => {
