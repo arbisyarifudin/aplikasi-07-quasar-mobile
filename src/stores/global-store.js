@@ -36,17 +36,19 @@ export const useGlobalStore = defineStore('globalStore', {
         .then((res) => {
           console.log('checkAvaiableUpdate res', res.data)
 
-          const resData = res.data?.data ?? {}
+          const resData = res.data?.data ?? null
 
-          console.log('APP_VERSION', `v${process.env.APP_VERSION}`)
-          console.log('UPDATE_VERSION', `v${resData.version}`)
+          if (resData) {
+            console.log('APP_VERSION', `v${process.env.APP_VERSION}`)
+            console.log('UPDATE_VERSION', `v${resData.version}`)
 
-          // check if update available
-          const isUpdateAvailable = resData.version !== process.env.APP_VERSION
-          this.setIsUpdateAvailable(isUpdateAvailable)
+            // check if update available
+            const isUpdateAvailable = resData.version !== process.env.APP_VERSION
+            this.setIsUpdateAvailable(isUpdateAvailable)
 
-          // set update info
-          this.setUpdateAvailableInfo(resData)
+            // set update info
+            this.setUpdateAvailableInfo(resData)
+          }
         })
         .catch((error) => {
           console.log('checkAvaiableUpdate error', error)
