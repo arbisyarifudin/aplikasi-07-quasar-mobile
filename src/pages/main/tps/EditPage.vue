@@ -15,7 +15,7 @@
             <div class="text-small text-warning text-semibold">
               <!-- Kabupaten Bantul, Kapanewon Banguntapan, Desa Banguntapan, Dusun Durian -->
               {{ selectedUserArea.area_code }} - {{ selectedUserArea.area_name }}
-              <q-btn dense size="sm" flat no-caps color="grey-2" class="q-ml-sm" :to="{ name: 'TPS Select Area Page' }">
+              <q-btn dense size="sm" flat no-caps color="grey-2" class="q-ml-sm" :to="{ name: 'TPS Select Area Page', query: { id: detailData.id } }">
                 <ph-icon name="PencilSimple" size="15" />
               </q-btn>
             </div>
@@ -182,6 +182,8 @@ const getDetailArea = async () => {
     .catch((err) => {
       console.log('err', err)
       fetchLoading.value = false
+
+      state.value.user_area_id = selectedUserArea.value.id ? selectedUserArea.value.id : ''
     })
 }
 
