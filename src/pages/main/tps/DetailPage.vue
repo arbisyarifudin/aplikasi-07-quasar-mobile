@@ -4,7 +4,7 @@
       <q-card-section>
         <div class="flex items-center justify-between">
           <div class="text-h6 text-semibold">Detail TPS</div>
-          <q-btn type="reset" no-caps size="sm" color="warning" flat :to="{ name: 'TPS Index Page' }">
+          <q-btn type="reset" no-caps size="sm" color="warning" flat :to="{ name: 'TPS Index Page', query: $route.query }">
             <ph-icon name="ArrowUUpLeft" size="15" class="q-mr-sm" />
             <span>Kembali</span>
           </q-btn>
@@ -240,7 +240,7 @@ const getDetail = async () => {
         total_voters: detailData.value.result?.total_voters,
         total_voted: detailData.value.result?.total_voted,
         c1_file: null,
-        c1_file_image: process.env.STORAGE_URL + detailData.value.result?.c1_file,
+        c1_file_image: detailData.value.result?.c1_file ? process.env.STORAGE_URL + detailData.value.result?.c1_file : '',
         note: detailData.value.result?.note
       }))
 

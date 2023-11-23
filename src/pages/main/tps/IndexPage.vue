@@ -138,7 +138,7 @@ const rows = ref([])
 const search = ref('')
 const loading = ref(false)
 const pagination = ref({
-  sortBy: 'created_at',
+  sortBy: 'area_pollings.created_at',
   descending: true,
   page: 1,
   rowsPerPage: 5,
