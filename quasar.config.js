@@ -16,7 +16,7 @@ const apiURLDevelopment = 'http://192.168.143.29:8000/api/'
 // const apiURLDevelopment = 'http://54.255.227.58:8000/api/'
 const apiURLProduction = deployMode === 'development' ? 'http://54.255.227.58:8000/api/' : 'http://54.255.227.58:8000/api/'
 
-const appVersionAndroid = '1.0.0'
+const appVersionAndroid = '1.0.1'
 const appVersionIOS = '1.0.0'
 
 module.exports = configure(function (ctx) {
