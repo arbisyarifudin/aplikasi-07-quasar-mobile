@@ -4,23 +4,23 @@
     <div class="q-mb-sm">
       <label for="old_password" class="text-h6 text-semibold q-mb-sm block">Kata sandi lama
       </label>
-      <q-input id="old_password" name="old_password" type="password" v-model="state.oldPassword"
-        placeholder="Masukkan kata sandi lama" outlined :error="errState?.oldPassword?.length > 0"
-        :error-message="errState?.oldPassword" @update:model-value="errState.oldPassword = ''" hide-bottom-space />
+      <q-input id="old_password" name="old_password" type="password" v-model="state.old_password"
+        placeholder="Masukkan kata sandi lama" outlined :error="errState?.old_password?.length > 0"
+        :error-message="errState?.old_password" @update:model-value="errState.old_password = ''" hide-bottom-space />
     </div>
     <div class="q-mb-sm">
       <label for="new_password" class="text-h6 text-semibold q-mb-sm block">Kata sandi baru
       </label>
-      <q-input id="new_password" name="new_password" type="password" v-model="state.newPassword"
-        placeholder="Masukkan kata sandi baru" outlined :error="errState?.newPassword?.length > 0"
-        :error-message="errState?.newPassword" @update:model-value="errState.newPassword = ''" hide-bottom-space />
+      <q-input id="new_password" name="new_password" type="password" v-model="state.password"
+        placeholder="Masukkan kata sandi baru" outlined :error="errState?.password?.length > 0"
+        :error-message="errState?.password" @update:model-value="errState.password = ''" hide-bottom-space />
     </div>
     <div class="q-mb-sm">
       <label for="confirm_password" class="text-h6 text-semibold q-mb-sm block">Konfirmasi kata sandi baru
       </label>
-      <q-input id="confirm_password" name="confirm_password" type="password" v-model="state.confirmNewPassword"
-        placeholder="Masukkan kata sandi baru lagi" outlined :error="errState?.confirmNewPassword?.length > 0"
-        :error-message="errState?.confirmNewPassword" @update:model-value="errState.newPassword = ''" hide-bottom-space />
+      <q-input id="confirm_password" name="confirm_password" type="password" v-model="state.password_confirmation"
+        placeholder="Masukkan kata sandi baru lagi" outlined :error="errState?.password_confirmation?.length > 0"
+        :error-message="errState?.password_confirmation" @update:model-value="errState.password = ''" hide-bottom-space />
     </div>
     <div class="q-mt-md">
       <q-btn label="Simpan" color="primary" text-color="dark" no-caps type="submit" icon="save"
@@ -40,20 +40,20 @@ const $q = useQuasar()
 /* DATA */
 const loading = ref(false)
 const state = ref({
-  oldPassword: '',
-  newPassword: '',
-  confirmNewPassword: ''
+  old_password: '',
+  password: '',
+  password_confirmation: ''
 })
 const errState = ref({
-  oldPassword: '',
-  newPassword: '',
-  confirmNewPassword: ''
+  old_password: '',
+  password: '',
+  password_confirmation: ''
 })
 
 /* UPDATE OPERATION */
 const onSubmit = () => {
   loading.value = true
-  putAPI('v1/user/change-password', state.value)
+  putAPI('v1/user/password', state.value)
     .then((res) => {
       $q.notify({
         message: 'Kata sandi berhasil diperbarui',
@@ -62,15 +62,15 @@ const onSubmit = () => {
       })
 
       state.value = {
-        oldPassword: '',
-        newPassword: '',
-        confirmNewPassword: ''
+        old_password: '',
+        password: '',
+        password_confirmation: ''
       }
 
       errState.value = {
-        oldPassword: '',
-        newPassword: '',
-        confirmNewPassword: ''
+        old_password: '',
+        password: '',
+        password_confirmation: ''
       }
     })
     .catch(async (err) => {

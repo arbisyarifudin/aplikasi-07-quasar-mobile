@@ -188,7 +188,7 @@ const getPersonalInfo = async () => {
 
 const __savePersonal = async () => {
   loading.value = true
-  await putAPI('v1/user/update-profile', state.value)
+  await putAPI('v1/user/profile', state.value)
     .then((res) => {
       $q.notify({
         message: 'Data berhasil diperbarui',
