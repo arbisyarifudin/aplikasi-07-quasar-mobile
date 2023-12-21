@@ -21,6 +21,9 @@
               </q-btn>
             </div>
           </div>
+          <div class="q-mb-sm" v-else-if="!selectedUserArea">
+            <AreaSelector :data="state" :errors="errorState" @change="onChangeAreaSelector" />
+          </div>
         </q-card-section>
         <q-card-section>
           <div class="q-mb-sm">
@@ -96,13 +99,21 @@ import { showNotification } from 'src/utils/ui'
 import { computed, onMounted, ref, watch } from 'vue'
 import { useRouter } from 'vue-router'
 
+import AreaSelector from 'src/components/form/AreaSelector.vue'
+
 const state = ref({
   name: '',
   nik: '',
   phone: '',
   address: '',
   note: '',
-  user_area_id: ''
+  user_area_id: '',
+
+  regency_id: '',
+  district_id: '',
+  village_id: '',
+  subvillage_id: '',
+  subvillage_name: ''
 })
 
 const errorState = ref({
@@ -111,7 +122,13 @@ const errorState = ref({
   phone: '',
   address: '',
   note: '',
-  user_area_id: ''
+  user_area_id: '',
+
+  regency_id: '',
+  district_id: '',
+  village_id: '',
+  subvillage_id: '',
+  subvillage_name: ''
 })
 
 const resetForm = () => {
@@ -121,7 +138,13 @@ const resetForm = () => {
     phone: '',
     address: '',
     note: '',
-    user_area_id: ''
+    user_area_id: '',
+
+    regency_id: '',
+    district_id: '',
+    village_id: '',
+    subvillage_id: '',
+    subvillage_name: ''
   }
 
   errorState.value = {
@@ -130,7 +153,13 @@ const resetForm = () => {
     phone: '',
     address: '',
     note: '',
-    user_area_id: ''
+    user_area_id: '',
+
+    regency_id: '',
+    district_id: '',
+    village_id: '',
+    subvillage_id: '',
+    subvillage_name: ''
   }
 }
 
@@ -147,7 +176,13 @@ const submitForm = () => {
     phone: '',
     address: '',
     note: '',
-    user_area_id: ''
+    user_area_id: '',
+
+    regency_id: '',
+    district_id: '',
+    village_id: '',
+    subvillage_id: '',
+    subvillage_name: ''
   }
 
   submitLoading.value = true
@@ -182,6 +217,7 @@ const $router = useRouter()
 const globalStore = useGlobalStore()
 const selectedUserArea = computed(() => globalStore.selectedUserArea)
 
+// eslint-disable-next-line no-unused-vars
 const checkSelectedUserArea = () => {
   // console.log('selectedUserArea', selectedUserArea.value)
   if (selectedUserArea.value) {
@@ -193,25 +229,55 @@ const checkSelectedUserArea = () => {
       globalStore.setSelectedUserArea(localSelectedUserArea)
       state.value.user_area_id = localSelectedUserArea.id
     } else {
-      $router.push({ name: 'Constituent Select Area Page' })
+      // $router.push({ name: 'Constituent Select Area Page' })
     }
   }
 }
 
 onMounted(() => {
   resetForm()
-  checkSelectedUserArea()
+  // checkSelectedUserArea()
 })
 
 watch(() => selectedUserArea.value, (val) => {
-  checkSelectedUserArea()
+  // checkSelectedUserArea()
 })
 
 watch(() => $router.currentRoute.value.name, (val) => {
   // resetForm()
   if (val) {
-    checkSelectedUserArea()
+    // checkSelectedUserArea()
   }
 })
+
+/* AREA SELECTOR */
+const localSelectedArea = ref(null)
+onMounted(() => {
+  localSelectedArea.value = LocalStorage.getItem('app_selected_area')
+  if (localSelectedArea.value) {
+    state.value.subvillage_id = localSelectedArea.value.subvillage_id
+    state.value.subvillage_name = localSelectedArea.value.subvillage_name
+    state.value.village_id = localSelectedArea.value.village_id
+    state.value.district_id = localSelectedArea.value.district_id
+    state.value.regency_id = localSelectedArea.value.regency_id
+  }
+})
+
+const onChangeAreaSelector = (payload) => {
+  // console.log('onChangeAreaSelector', payload)
+  // payload: {
+  //   subvillage_id: null,
+  //   subvillage_name: val,
+  //   village_id: state.value.village_id,
+  //   district_id: state.value.district_id,
+  //   regency_id: state.value.regency_id
+  // }
+
+  state.value.subvillage_id = payload.subvillage_id
+  state.value.subvillage_name = payload.subvillage_name
+  state.value.village_id = payload.village_id
+  state.value.district_id = payload.district_id
+  state.value.regency_id = payload.regency_id
+}
 
 </script>

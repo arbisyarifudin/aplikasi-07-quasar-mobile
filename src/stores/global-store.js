@@ -34,7 +34,7 @@ export const useGlobalStore = defineStore('globalStore', {
         }
       })
         .then((res) => {
-          console.log('checkAvaiableUpdate res', res.data)
+          // console.log('checkAvaiableUpdate res', res.data)
 
           const resData = res.data?.data ?? null
 

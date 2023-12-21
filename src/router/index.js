@@ -52,7 +52,7 @@ export default route(function (/* { store, ssrContext } */) {
     // })
 
     // get quasar platform info
-    console.log('Platform', Platform.is)
+    // console.log('Platform', Platform.is)
     const platform = Platform.is?.mobile ? Platform.is.platform : ''
 
     const globalStore = useGlobalStore()
