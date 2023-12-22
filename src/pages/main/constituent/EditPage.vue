@@ -81,12 +81,12 @@
         <!-- </q-card> -->
         <!-- <q-card class="q-mt-none"> -->
         <q-card-actions align="between">
-          <q-btn type="reset" no-caps size="md" color="warning" flat
+          <q-btn type="reset" no-caps size="sm" color="warning" flat
             :to="{ name: 'Constituent Index Page', query: { refresh: backPageNeedRefresh } }">
             <ph-icon name="ArrowUUpLeft" size="16" class="q-mr-sm" />
             <span>Kembali</span>
           </q-btn>
-          <q-btn type="submit" no-caps size="md" color="primary" text-color="dark"
+          <q-btn type="submit" no-caps size="sm" color="primary" text-color="dark"
             :loading="submitLoading || fetchLoading" :disable="submitLoading || fetchLoading">
             <ph-icon name="FloppyDisk" size="16" class="q-mr-sm" />
             <span>Simpan Perubahan</span>
@@ -182,7 +182,22 @@ const getDetail = async () => {
     .then(async (res) => {
       // console.log('res', res)
       detailData.value = res.data.data
-      state.value = JSON.parse(JSON.stringify(detailData.value))
+      state.value = JSON.parse(JSON.stringify({
+        name: detailData.value.name,
+        nik: detailData.value.nik,
+        phone: detailData.value.phone,
+        address: detailData.value.address,
+        note: detailData.value.note,
+        user_area_id: detailData.value.user_area_id,
+
+        regency_id: detailData.value.regency_id,
+        district_id: detailData.value.district_id,
+        village_id: detailData.value.village_id,
+        subvillage_id: detailData.value.subvillage_id,
+        subvillage_name: detailData.value.subvillage_name
+      }))
+
+      // console.log('state', state.value)
 
       // get detail user area data
       if (!$route.query?.area_id) {
@@ -194,8 +209,9 @@ const getDetail = async () => {
           // state.value.user_area_id = $route.query.area_id
           // await getDetailArea()
         }
-        fetchLoading.value = false
+        // fetchLoading.value = false
       }
+      fetchLoading.value = false
     })
     .catch(async (err) => {
       console.log('err', err)
@@ -308,6 +324,7 @@ const submitForm = () => {
 }
 
 /* AREA */
+// eslint-disable-next-line no-unused-vars
 const $router = useRouter()
 const globalStore = useGlobalStore()
 const selectedUserArea = computed(() => globalStore.selectedUserArea)

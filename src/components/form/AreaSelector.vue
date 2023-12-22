@@ -38,11 +38,11 @@
         type="subvillage_id" :error="errorState?.subvillage_id?.length > 0" :error-message="errorState?.subvillage_id"
         input-debounce="300" hide-bottom-space @update:model-value="onSubvillageChange" clearable />
 
-      <div class="q-mt-sm alert-info q-py-sm" v-if="!subvillageLoading && !subvillageOptions.length">
+      <div class="q-mt-sm alert-info q-py-sm text-caption" v-if="!subvillageLoading && !subvillageOptions.length">
         Dusun untuk Kalurahan ini belum tersedia. Silahkan tambahkan dengan mengisi form di
         bawah:
       </div>
-      <div class="q-mt-sm alert-info q-py-sm" v-else-if="!subvillageLoading && subvillageOptions.length">
+      <div class="q-mt-sm alert-info q-py-sm text-caption" v-else-if="!subvillageLoading && subvillageOptions.length">
         <span class="text-success" v-if="newlySubvillageAdded">Dusun berhasil ditambahkan untuk
           kalurahan ini.</span>
         <span v-else>Jika dusun yang Anda cari tidak ada di daftar, silahkan tambahkan dengan
@@ -89,8 +89,30 @@ const $props = defineProps({
 
 watch(
   () => $props.data,
-  (val) => {
+  async (val) => {
     state.value = JSON.parse(JSON.stringify(val))
+
+    if (state.value) {
+      if (!state.value.subvillage_id && !state.value.subvillage_name) {
+        return
+      }
+
+      if ($props.mode === 'edit') {
+        await getRegency()
+      }
+
+      const payload = {
+        subvillage_id: state.value.subvillage_id,
+        subvillage_name: state.value.subvillage_name,
+        village_id: state.value.village_id,
+        district_id: state.value.district_id,
+        regency_id: state.value.regency_id
+      }
+
+      emit('change', payload)
+    }
+  }, {
+    deep: true
   }
 )
 
@@ -98,6 +120,8 @@ watch(
   () => $props.errors,
   (val) => {
     errorState.value = JSON.parse(JSON.stringify(val))
+  }, {
+    deep: true
   }
 )
 
@@ -137,7 +161,7 @@ const getRegency = async () => {
       value: item.id
     }))
 
-    if (state.value.regency_id) {
+    if (state.value.regency_id && $props.mode === 'edit') {
       onRegencyChange(state.value.regency_id, false)
     }
   } catch (err) {
@@ -170,6 +194,17 @@ const resetErrorState = () => {
 onMounted(() => {
   resetState()
   resetErrorState()
+
+  if ($props.mode === 'edit') {
+    state.value = {
+      regency_id: $props.data.regency_id,
+      district_id: $props.data.district_id,
+      village_id: $props.data.village_id,
+      subvillage_id: $props.data.subvillage_id,
+      subvillage_name: $props.data.subvillage_name
+    }
+  }
+
   getRegency()
 })
 
@@ -284,32 +319,32 @@ const newlySubvillageAdded = ref(false)
 /* */
 const emit = defineEmits(['change'])
 
-watch(
-  () => state.value,
-  async (val) => {
-    // console.log('state.value', val)
+// watch(
+//   () => state.value,
+//   async (val) => {
+//     // console.log('state.value', val)
 
-    if (!val.subvillage_id && !val.subvillage_name) {
-      return
-    }
+//     if (!val.subvillage_id && !val.subvillage_name) {
+//       return
+//     }
 
-    if ($props.mode === 'edit') {
-      await getRegency()
-    }
+//     if ($props.mode === 'edit') {
+// await getRegency()
+//     }
 
-    const payload = {
-      subvillage_id: val.subvillage_id,
-      subvillage_name: val.subvillage_name,
-      village_id: val.village_id,
-      district_id: val.district_id,
-      regency_id: val.regency_id
-    }
+//     const payload = {
+//       subvillage_id: val.subvillage_id,
+//       subvillage_name: val.subvillage_name,
+//       village_id: val.village_id,
+//       district_id: val.district_id,
+//       regency_id: val.regency_id
+//     }
 
-    emit('change', payload)
-  }, {
-    deep: true
-  }
-)
+//     emit('change', payload)
+//   }, {
+//     deep: true
+//   }
+// )
 
 const onSubvillageChange = (val) => {
   console.log('onSubvillageChange', val)

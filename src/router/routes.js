@@ -100,14 +100,14 @@ const routes = [
         },
         component: () => import('pages/main/constituent/IndexPage.vue')
       },
-      {
-        path: 'constituent/select-area',
-        name: 'Constituent Select Area Page',
-        meta: {
-          title: 'Pilih Wilayah Kerja'
-        },
-        component: () => import('pages/main/constituent/SelectAreaPage.vue')
-      },
+      // {
+      //   path: 'constituent/select-area',
+      //   name: 'Constituent Select Area Page',
+      //   meta: {
+      //     title: 'Pilih Wilayah Kerja'
+      //   },
+      //   component: () => import('pages/main/constituent/SelectAreaPage.vue')
+      // },
       {
         path: 'constituent/create',
         name: 'Constituent Create Page',
@@ -142,14 +142,14 @@ const routes = [
       //   },
       //   component: () => import('pages/main/tps/SelectPollingPage.vue')
       // },
-      {
-        path: 'tps/select-area',
-        name: 'TPS Select Area Page',
-        meta: {
-          title: 'Pilih Wilayah Kerja'
-        },
-        component: () => import('pages/main/tps/SelectAreaPage.vue')
-      },
+      // {
+      //   path: 'tps/select-area',
+      //   name: 'TPS Select Area Page',
+      //   meta: {
+      //     title: 'Pilih Wilayah Kerja'
+      //   },
+      //   component: () => import('pages/main/tps/SelectAreaPage.vue')
+      // },
       {
         path: 'tps/create',
         name: 'TPS Create Page',

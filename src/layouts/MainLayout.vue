@@ -27,9 +27,9 @@
 
     <q-page-container>
       <router-view v-slot="{ Component }">
-        <keep-alive :exclude="[]">
+        <!-- <keep-alive :exclude="[]"> -->
           <component :is="Component" />
-        </keep-alive>
+        <!-- </keep-alive> -->
       </router-view>
       <q-page-sticky position="bottom-right" :offset="[18, 18]">
         <q-fab v-if="fabRightWrapperShow" v-model="fabRightState" vertical-actions-align="right" color="primary"

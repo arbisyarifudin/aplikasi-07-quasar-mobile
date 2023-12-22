@@ -75,11 +75,11 @@
         <!-- </q-card> -->
         <!-- <q-card class="q-mt-none"> -->
         <q-card-actions align="between">
-          <q-btn type="reset" no-caps size="md" color="warning" flat :to="{ name: 'Constituent Index Page' }">
+          <q-btn type="reset" no-caps size="sm" color="warning" flat :to="{ name: 'Constituent Index Page' }">
             <ph-icon name="X" size="16" class="q-mr-sm" />
             <span>Batal</span>
           </q-btn>
-          <q-btn type="submit" no-caps size="md" color="primary" text-color="dark" :loading="submitLoading"
+          <q-btn type="submit" no-caps size="sm" color="primary" text-color="dark" :loading="submitLoading"
             :disable="submitLoading">
             <ph-icon name="FloppyDisk" size="16" class="q-mr-sm" />
             <span>Simpan & Kirim</span>
@@ -255,11 +255,11 @@ const localSelectedArea = ref(null)
 onMounted(() => {
   localSelectedArea.value = LocalStorage.getItem('app_selected_area')
   if (localSelectedArea.value) {
-    state.value.subvillage_id = localSelectedArea.value.subvillage_id
-    state.value.subvillage_name = localSelectedArea.value.subvillage_name
-    state.value.village_id = localSelectedArea.value.village_id
-    state.value.district_id = localSelectedArea.value.district_id
-    state.value.regency_id = localSelectedArea.value.regency_id
+    // state.value.subvillage_id = localSelectedArea.value.subvillage_id
+    // state.value.subvillage_name = localSelectedArea.value.subvillage_name
+    // state.value.village_id = localSelectedArea.value.village_id
+    // state.value.district_id = localSelectedArea.value.district_id
+    // state.value.regency_id = localSelectedArea.value.regency_id
   }
 })
 

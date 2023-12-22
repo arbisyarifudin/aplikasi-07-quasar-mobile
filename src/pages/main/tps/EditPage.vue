@@ -26,7 +26,7 @@
               </div>
             </div>
           </div>
-          <div class="q-mb-sm" v-else-if="!selectedUserArea && (detailData.id && !detailData.user_area_id)">
+          <div class="q-mb-sm hidden" v-else-if="!selectedUserArea && (detailData.id && !detailData.user_area_id)">
             <span>Pilih wilayah kerja:</span>
             <q-btn dense size="sm" flat no-caps color="primary" class="q-ml-sm" :to="{ name: 'TPS Select Area Page' }">
               <ph-icon name="PencilSimple" size="15" /> Pilih
@@ -35,6 +35,9 @@
           <div class="flex items-center" v-if="fetchLoading">
             <q-spinner />
             <span class="text-small q-ml-sm text-grey-6">Memuat data...</span>
+          </div>
+          <div class="q-mb-sm" v-else-if="!selectedUserArea">
+            <AreaSelector mode="edit" :data="state" :errors="errorState" @change="onChangeAreaSelector" />
           </div>
         </q-card-section>
         <q-card-section>
@@ -74,12 +77,12 @@
         <!-- </q-card> -->
         <!-- <q-card class="q-mt-none"> -->
         <q-card-actions align="between">
-          <q-btn type="reset" no-caps size="md" color="warning" flat
+          <q-btn type="reset" no-caps size="sm" color="warning" flat
             :to="{ name: 'TPS Index Page', query: { refresh: backPageNeedRefresh } }">
             <ph-icon name="ArrowUUpLeft" size="16" class="q-mr-sm" />
             <span>Kembali</span>
           </q-btn>
-          <q-btn type="submit" no-caps size="md" color="primary" text-color="dark"
+          <q-btn type="submit" no-caps size="sm" color="primary" text-color="dark"
             :loading="submitLoading || fetchLoading" :disable="submitLoading || fetchLoading">
             <ph-icon name="FloppyDisk" size="16" class="q-mr-sm" />
             <span>Simpan Perubahan</span>
@@ -99,29 +102,59 @@ import { showNotification } from 'src/utils/ui'
 import { computed, onMounted, ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 
+import AreaSelector from 'src/components/form/AreaSelector.vue'
+
 const state = ref({
   name: '',
   address: '',
-  note: ''
+  note: '',
+  user_area_id: '',
+
+  regency_id: '',
+  district_id: '',
+  village_id: '',
+  subvillage_id: '',
+  subvillage_name: ''
 })
 
 const errorState = ref({
   name: '',
   address: '',
-  note: ''
+  note: '',
+  user_area_id: '',
+
+  regency_id: '',
+  district_id: '',
+  village_id: '',
+  subvillage_id: '',
+  subvillage_name: ''
 })
 
 const resetForm = () => {
   state.value = {
     name: '',
     address: '',
-    note: ''
+    note: '',
+    user_area_id: '',
+
+    regency_id: '',
+    district_id: '',
+    village_id: '',
+    subvillage_id: '',
+    subvillage_name: ''
   }
 
   errorState.value = {
     name: '',
     address: '',
-    note: ''
+    note: '',
+    user_area_id: '',
+
+    regency_id: '',
+    district_id: '',
+    village_id: '',
+    subvillage_id: '',
+    subvillage_name: ''
   }
 }
 
@@ -135,22 +168,36 @@ const getDetail = async () => {
   // get detail tps data
   await api.get('v1/area-polling/' + id)
     .then(async (res) => {
-      console.log('res', res)
+      console.log('res', res.data)
       detailData.value = res.data.data
-      state.value = JSON.parse(JSON.stringify(detailData.value))
+      state.value = JSON.parse(JSON.stringify({
+        name: detailData.value.name,
+        address: detailData.value.address,
+        note: detailData.value.note,
+        user_area_id: detailData.value.user_area_id,
+
+        regency_id: detailData.value.regency_id,
+        district_id: detailData.value.district_id,
+        village_id: detailData.value.village_id,
+        subvillage_id: detailData.value.subvillage_id,
+        subvillage_name: detailData.value.subvillage_name
+      }))
+
+      // console.log('state.value', state.value)
 
       // get detail user area data
       if (!$route.query?.area_id) {
-        await getDetailArea()
+        // await getDetailArea()
       } else {
         if (selectedUserArea.value) {
-          state.value.user_area_id = selectedUserArea.value.id
+          // state.value.user_area_id = selectedUserArea.value.id
         } else {
           // state.value.user_area_id = $route.query.area_id
-          await getDetailArea()
+          // await getDetailArea()
         }
-        fetchLoading.value = false
+        // fetchLoading.value = false
       }
+      fetchLoading.value = false
     })
     .catch(async (err) => {
       console.log('err', err)
@@ -172,6 +219,7 @@ const getDetail = async () => {
     })
 }
 
+// eslint-disable-next-line no-unused-vars
 const getDetailArea = async () => {
   await api.get('v1/user-area/' + detailData.value.user_area_id)
     .then((res) => {
@@ -210,11 +258,29 @@ const submitForm = () => {
   errorState.value = {
     name: '',
     address: '',
-    note: ''
+    note: '',
+    user_area_id: '',
+
+    regency_id: '',
+    district_id: '',
+    village_id: '',
+    subvillage_id: '',
+    subvillage_name: ''
   }
 
   submitLoading.value = true
-  api.put('v1/area-polling/' + detailData.value.id, state.value)
+  api.put('v1/area-polling/' + detailData.value.id, {
+    name: state.value.name,
+    address: state.value.address,
+    note: state.value.note,
+    user_area_id: state.value.user_area_id,
+
+    regency_id: state.value.regency_id,
+    district_id: state.value.district_id,
+    village_id: state.value.village_id,
+    subvillage_id: state.value.subvillage_id,
+    subvillage_name: state.value.subvillage_name
+  })
     .then(async (res) => {
       console.log('res', res)
       showNotification('Konstituen berhasil diperbarui', 'positive', 'check')
@@ -242,10 +308,12 @@ const submitForm = () => {
 }
 
 /* AREA */
+// eslint-disable-next-line no-unused-vars
 const $router = useRouter()
 const globalStore = useGlobalStore()
 const selectedUserArea = computed(() => globalStore.selectedUserArea)
 
+// eslint-disable-next-line no-unused-vars
 const checkSelectedUserArea = () => {
   // console.log('selectedUserArea', selectedUserArea.value)
   if (selectedUserArea.value) {
@@ -257,13 +325,44 @@ const checkSelectedUserArea = () => {
       globalStore.setSelectedUserArea(localSelectedUserArea)
       state.value.user_area_id = localSelectedUserArea.id
     } else {
-      $router.push({ name: 'TPS Select Area Page' })
+      // $router.push({ name: 'TPS Select Area Page' })
     }
   }
 }
 
 watch(() => selectedUserArea.value, (val) => {
-  checkSelectedUserArea()
+  // checkSelectedUserArea()
 })
+
+/* AREA SELECTOR */
+// const localSelectedArea = ref(null)
+// onMounted(() => {
+//   localSelectedArea.value = LocalStorage.getItem('app_selected_area')
+//   if (localSelectedArea.value) {
+//     state.value.subvillage_id = localSelectedArea.value.subvillage_id
+//     state.value.subvillage_name = localSelectedArea.value.subvillage_name
+//     state.value.village_id = localSelectedArea.value.village_id
+//     state.value.district_id = localSelectedArea.value.district_id
+//     state.value.regency_id = localSelectedArea.value.regency_id
+//   }
+// })
+
+const onChangeAreaSelector = (payload) => {
+  // console.log('onChangeAreaSelector', payload)
+  // payload: {
+  //   subvillage_id: null,
+  //   subvillage_name: val,
+  //   village_id: state.value.village_id,
+  //   district_id: state.value.district_id,
+  //   regency_id: state.value.regency_id
+  // }
+
+  state.value.user_area_id = null
+  state.value.subvillage_id = payload.subvillage_id
+  state.value.subvillage_name = payload.subvillage_name
+  state.value.village_id = payload.village_id
+  state.value.district_id = payload.district_id
+  state.value.regency_id = payload.regency_id
+}
 
 </script>
