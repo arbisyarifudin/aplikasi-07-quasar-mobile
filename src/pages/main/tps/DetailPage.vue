@@ -102,13 +102,26 @@
           </div>
           <div class="q-mb-md">
             <label for="result_c1_file" class="text-small q-mb-sm block">Unggah Foto C1 <span class="text-warning">*</span></label>
-            <q-img v-if="state2.c1_file_image" :src="state2.c1_file_image" class="q-mb-sm" style="max-height: 400px" fit />
-            <q-file v-model="state2.c1_file" id="result_c1_file" class="text-small" :error-message="errorState2.c1_file"
+            <!-- <q-img v-if="state2.c1_file_url" :src="state2.c1_file_url" class="q-mb-sm" style="max-height: 400px" fit /> -->
+            <!-- <q-file v-model="state2.c1_file" id="result_c1_file" class="text-small" :error-message="errorState2.c1_file"
               :error="errorState2.c1_file?.length > 0" outlined dense accept=".jpg,.jpeg,.png,.pdf" counter>
               <template v-slot:prepend>
                 <q-icon name="attach_file" />
               </template>
-            </q-file>
+            </q-file> -->
+            <q-card>
+              <q-card-section v-if="capturedImageUrl">
+                <q-img :src="capturedImageUrl" class="image-captured" />
+              </q-card-section>
+              <q-card-section>
+                <q-btn outlined color="grey-9" text-color="white" class="full-width" @click="captureImage">
+                  <ph-icon name="Camera" />
+                </q-btn>
+                <div class="q-mt-sm text-center text-caption">Klik untuk ambil foto</div>
+                <div class="q-mt-sm text-center text-small text-negative q-mt-sm" v-if="errorState2.c1_file?.length">
+                  {{ errorState2.c1_file }}</div>
+              </q-card-section>
+            </q-card>
           </div>
           <div class="q-mb-md">
             <label for="witness_note" class="text-small q-mb-sm block">Keterangan</label>
@@ -192,7 +205,7 @@
 </template>
 
 <script setup>
-import { useQuasar } from 'quasar'
+import { useQuasar, Platform } from 'quasar'
 import { api } from 'src/boot/axios'
 import { useGlobalStore } from 'src/stores/global-store'
 import { mapErrorMessage } from 'src/utils/error'
@@ -200,6 +213,8 @@ import { showNotification } from 'src/utils/ui'
 // import { showNotification } from 'src/utils/ui'
 import { onMounted, ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
+
+import { Camera } from '@capacitor/camera'
 
 const $q = useQuasar()
 const $router = useRouter()
@@ -240,9 +255,11 @@ const getDetail = async () => {
         total_voters: detailData.value.result?.total_voters,
         total_voted: detailData.value.result?.total_voted,
         c1_file: null,
-        c1_file_image: detailData.value.result?.c1_file ? process.env.STORAGE_URL + detailData.value.result?.c1_file : '',
+        c1_file_url: detailData.value.result?.c1_file_url,
         note: detailData.value.result?.note
       }))
+
+      capturedImageUrl.value = detailData.value.result?.c1_file_url
 
       fetchLoading.value = false
 
@@ -378,6 +395,7 @@ const onSubmitForm1 = () => {
         submitLoading1.value = false
         if (errorResponse.status === 422) {
           errorState1.value = mapErrorMessage(errorResponse.data.errors)
+          showNotification('Input saksi TPS tidak valid. Periksa kembali.', 'warning')
         } else {
           // show alert error
           $q.notify({
@@ -410,6 +428,7 @@ const onSubmitForm1 = () => {
         submitLoading1.value = false
         if (errorResponse.status === 422) {
           errorState1.value = mapErrorMessage(errorResponse.data.errors)
+          showNotification('Input saksi TPS tidak valid. Periksa kembali.', 'warning')
         } else {
           // show alert error
           $q.notify({
@@ -549,6 +568,7 @@ const onSubmitForm2 = () => {
       submitLoading2.value = false
       if (errorResponse.status === 422) {
         errorState2.value = mapErrorMessage(errorResponse.data.errors)
+        showNotification('Input hasil milihan tidak valid. Periksa kembali.', 'warning')
       } else {
         // show alert error
         $q.notify({
@@ -560,6 +580,47 @@ const onSubmitForm2 = () => {
         })
       }
     })
+}
+
+/* CAMERA (capacitor/ionic) */
+const capturedImageUrl = ref(null)
+async function captureImage () {
+  // const check = await Camera.checkPermissions()
+  // console.log('check', check)
+
+  if (Platform.is.nativeMobile) {
+    try {
+      const request = await Camera.requestPermissions({
+        permissions: ['camera']
+      })
+      console.log('requestPermissions', JSON.stringify(request))
+    } catch (error) {
+      console.log('error requestPermissions', JSON.stringify(error))
+    }
+  }
+
+  try {
+    const image = await Camera.getPhoto({
+      quality: 100,
+      allowEditing: false,
+      saveToGallery: false,
+      source: 'CAMERA',
+      resultType: 'uri'
+    })
+
+    capturedImageUrl.value = image.webPath
+
+    const blob = await convertImagePathToBlob(image.webPath)
+    state2.value.c1_file = blob
+  } catch (error) {
+    console.log('getPhoto error', JSON.stringify(error))
+  }
+}
+
+const convertImagePathToBlob = async (image) => {
+  const response = await fetch(image)
+  const blob = await response.blob()
+  return blob
 }
 
 </script>

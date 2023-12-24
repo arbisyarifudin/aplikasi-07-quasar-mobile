@@ -400,6 +400,7 @@ const submitForm = () => {
       submitLoading.value = false
       if (errorResponse.status === 422) {
         errorState.value = mapErrorMessage(errorResponse.data.errors)
+        showNotification('Input tidak valid. Mohon periksa kembali', 'warning')
       } else {
         // show alert error
         $q.notify({
