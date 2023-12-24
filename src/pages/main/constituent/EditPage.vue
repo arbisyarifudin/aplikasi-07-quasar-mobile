@@ -59,7 +59,7 @@
             <q-input id="constituent_address" name="constituent_address" type="textarea" autogrow
               input-style="min-height: 80px" v-model="state.address" placeholder="Masukkan alamat konstituen" outlined
               dense :error="errorState?.address?.length > 0" :error-message="errorState?.address"
-              @update:model-value="errorState.address = ''" :disable="fetchLoading" hide-bottom-space />
+              @update:model-value="errorState.address = ''" :disable="fetchLoading" hide-bottom-space hint="Misal: Jl. Raya Banguntapan No. 1" />
           </div>
 
           <div class="q-mb-md">

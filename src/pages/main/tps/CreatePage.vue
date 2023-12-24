@@ -28,7 +28,7 @@
             </div>
           </div>
           <div class="q-mb-sm" v-else-if="!selectedUserArea">
-            <AreaSelector :data="state" :errors="errorState" @change="onChangeAreaSelector" />
+            <AreaSelector :data="state" :errors="errorState" :auto-fetch="areaNeedAutoFetch" @change="onChangeAreaSelector" />
           </div>
         </q-card-section>
         <q-card-section>
@@ -41,11 +41,11 @@
           </div>
           <div class="q-mb-sm">
             <label for="tps_address" class="text-small text-semibold q-mb-sm block">Alamat <span
-                class="text-warning">*</span></label>
+                class="text-warning text-caption">[tidak wajib]</span></label>
             <q-input id="tps_address" name="tps_address" type="textarea" autogrow input-style="min-height: 80px"
               v-model="state.address" placeholder="Masukkan alamat TPS" outlined dense
               :error="errorState?.address?.length > 0" :error-message="errorState?.address"
-              @update:model-value="errorState.address = ''" hide-bottom-space />
+              @update:model-value="errorState.address = ''" hide-bottom-space hint="Misal: Jl. Raya Banguntapan No. 1" />
           </div>
           <div class="q-mb-sm">
             <label for="tps_note" class="text-small text-semibold q-mb-sm block">Keterangan <span
@@ -183,6 +183,7 @@ const submitForm = () => {
       submitLoading.value = false
       if (errorResponse.status === 422) {
         errorState.value = mapErrorMessage(errorResponse.data.errors)
+        showNotification('Input tidak valid. Mohon periksa kembali', 'warning')
       } else {
         // show alert error
         $q.notify({
@@ -235,15 +236,23 @@ watch(() => $router.currentRoute.value.name, (val) => {
 })
 
 /* AREA SELECTOR */
+const areaNeedAutoFetch = computed(() => {
+  if (state.value.name || state.value.address || state.value.note) {
+    return false
+  }
+
+  return true
+})
+
 const localSelectedArea = ref(null)
 onMounted(() => {
   localSelectedArea.value = LocalStorage.getItem('app_selected_area')
   if (localSelectedArea.value) {
-    // state.value.subvillage_id = localSelectedArea.value.subvillage_id
-    // state.value.subvillage_name = localSelectedArea.value.subvillage_name
-    // state.value.village_id = localSelectedArea.value.village_id
-    // state.value.district_id = localSelectedArea.value.district_id
-    // state.value.regency_id = localSelectedArea.value.regency_id
+    state.value.subvillage_id = localSelectedArea.value.subvillage_id
+    state.value.subvillage_name = localSelectedArea.value.subvillage_name
+    state.value.village_id = localSelectedArea.value.village_id
+    state.value.district_id = localSelectedArea.value.district_id
+    state.value.regency_id = localSelectedArea.value.regency_id
   }
 })
 

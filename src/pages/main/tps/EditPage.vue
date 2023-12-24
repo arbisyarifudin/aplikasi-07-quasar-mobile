@@ -37,7 +37,7 @@
             <span class="text-small q-ml-sm text-grey-6">Memuat data...</span>
           </div>
           <div class="q-mb-sm" v-else-if="!selectedUserArea">
-            <AreaSelector mode="edit" :data="state" :errors="errorState" @change="onChangeAreaSelector" />
+            <AreaSelector mode="edit" :data="state" :errors="errorState" :auto-fetch="true" @change="onChangeAreaSelector" />
           </div>
         </q-card-section>
         <q-card-section>
@@ -51,11 +51,11 @@
           </div>
           <div class="q-mb-sm">
             <label for="tps_address" class="text-small text-semibold q-mb-sm block">Alamat <span
-                class="text-warning">*</span></label>
+                class="text-warning text-caption">[tidak wajib]</span></label>
             <q-input id="tps_address" name="tps_address" type="textarea" autogrow input-style="min-height: 80px"
               v-model="state.address" placeholder="Masukkan alamat TPS" outlined dense
               :error="errorState?.address?.length > 0" :error-message="errorState?.address"
-              @update:model-value="errorState.address = ''" :disable="fetchLoading" hide-bottom-space />
+              @update:model-value="errorState.address = ''" :disable="fetchLoading" hide-bottom-space hint="Misal: Jl. Raya Banguntapan No. 1" />
           </div>
           <div class="q-mb-sm">
             <label for="tps_note" class="text-small text-semibold q-mb-sm block">Keterangan <span
