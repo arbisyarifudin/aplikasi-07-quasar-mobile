@@ -22,7 +22,7 @@
             </div>
           </div>
           <div class="q-mb-sm" v-else-if="!selectedUserArea">
-            <AreaSelector mode="edit" :data="state" :errors="errorState" @change="onChangeAreaSelector" />
+            <AreaSelector mode="edit" :data="state" :errors="errorState" :auto-fetch="true" @change="onChangeAreaSelector" />
           </div>
           <div class="flex items-center" v-if="fetchLoading">
             <q-spinner />
@@ -61,6 +61,44 @@
               dense :error="errorState?.address?.length > 0" :error-message="errorState?.address"
               @update:model-value="errorState.address = ''" :disable="fetchLoading" hide-bottom-space />
           </div>
+
+          <div class="q-mb-md">
+            <label for="constituent_is_stickered" class="text-small text-semibold q-mb-sm block">Stiker</label>
+            <div class="flex items-center">
+              <q-toggle id="constituent_is_stickered" name="constituent_is_stickered" v-model="state.is_stickered" :true-value="1" :false-value="0"
+                color="primary" dense size="sm" class="q-mr-sm" />
+              <div class="text-small">Apakah sudah ditempeli stiker?</div>
+            </div>
+          </div>
+
+          <div class="q-mb-md">
+            <label for="constituent_sticker_photo" class="text-small text-semibold q-mb-sm block">Foto Stiker <span
+                class="text-warning text-caption">[tidak wajib]</span></label>
+            <q-card>
+              <q-card-section v-if="capturedImageUrl">
+                <q-img :src="capturedImageUrl" class="image-captured" />
+              </q-card-section>
+              <q-card-section>
+                <q-btn outlined color="grey-9" text-color="white" class="full-width" @click="captureImage">
+                  <ph-icon name="Camera" />
+                </q-btn>
+                <div class="q-mt-sm text-center text-caption">Klik untuk ambil foto</div>
+                <div class="q-mt-sm text-center text-small text-negative q-mt-sm" v-if="errorState.sticker_photo?.length">
+                  {{ errorState.sticker_photo }}</div>
+              </q-card-section>
+            </q-card>
+          </div>
+
+          <div class="q-mb-md">
+            <label for="constituent_received_aid_program" class="text-small text-semibold q-mb-sm block">Program
+              Bantuan <span class="text-warning text-caption">[tidak wajib]</span></label>
+            <q-input id="constituent_received_aid_program" name="constituent_received_aid_program" type="textarea"
+              autogrow input-style="min-height: 60px" v-model="state.received_aid_program"
+              placeholder="Masukkan program bantuan yang diterima" outlined dense
+              :error="errorState?.received_aid_program?.length > 0" :error-message="errorState?.received_aid_program"
+              @update:model-value="errorState.received_aid_program = ''" hide-bottom-space hint="Misal: PKH, BST, BPNT, BST, BLT, dll" />
+          </div>
+
           <div class="q-mb-sm">
             <label for="constituent_note" class="text-small text-semibold q-mb-sm block">Keterangan <span
                 class="text-warning text-caption">[tidak wajib]</span></label>
@@ -98,13 +136,15 @@
 </template>
 
 <script setup>
-import { LocalStorage, useQuasar } from 'quasar'
+import { LocalStorage, Platform, useQuasar } from 'quasar'
 import { api } from 'src/boot/axios'
 import { useGlobalStore } from 'src/stores/global-store'
 import { mapErrorMessage } from 'src/utils/error'
 import { showNotification } from 'src/utils/ui'
 import { computed, onMounted, ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
+
+import { Camera } from '@capacitor/camera'
 
 import AreaSelector from 'src/components/form/AreaSelector.vue'
 
@@ -115,6 +155,10 @@ const state = ref({
   address: '',
   note: '',
   user_area_id: '',
+
+  is_stickered: false,
+  sticker_photo: '',
+  received_aid_program: '',
 
   regency_id: '',
   district_id: '',
@@ -130,6 +174,10 @@ const errorState = ref({
   address: '',
   note: '',
   user_area_id: '',
+
+  is_stickered: '',
+  sticker_photo: '',
+  received_aid_program: '',
 
   regency_id: '',
   district_id: '',
@@ -147,6 +195,10 @@ const resetForm = () => {
     note: '',
     user_area_id: '',
 
+    is_stickered: false,
+    sticker_photo: null,
+    received_aid_program: '',
+
     regency_id: '',
     district_id: '',
     village_id: '',
@@ -161,6 +213,10 @@ const resetForm = () => {
     address: '',
     note: '',
     user_area_id: '',
+
+    is_stickered: '',
+    sticker_photo: '',
+    received_aid_program: '',
 
     regency_id: '',
     district_id: '',
@@ -190,12 +246,18 @@ const getDetail = async () => {
         note: detailData.value.note,
         user_area_id: detailData.value.user_area_id,
 
+        is_stickered: detailData.value.is_stickered,
+        sticker_photo: null,
+        received_aid_program: detailData.value.received_aid_program,
+
         regency_id: detailData.value.regency_id,
         district_id: detailData.value.district_id,
         village_id: detailData.value.village_id,
         subvillage_id: detailData.value.subvillage_id,
         subvillage_name: detailData.value.subvillage_name
       }))
+
+      capturedImageUrl.value = detailData.value.sticker_photo_url
 
       // console.log('state', state.value)
 
@@ -275,6 +337,10 @@ const submitForm = () => {
     note: '',
     user_area_id: '',
 
+    is_stickered: '',
+    sticker_photo: '',
+    received_aid_program: '',
+
     regency_id: '',
     district_id: '',
     village_id: '',
@@ -283,20 +349,44 @@ const submitForm = () => {
   }
 
   submitLoading.value = true
-  api.put('v1/constituent/' + detailData.value.id, {
-    name: state.value.name,
-    nik: state.value.nik,
-    phone: state.value.phone,
-    address: state.value.address,
-    note: state.value.note,
-    user_area_id: state.value.user_area_id,
 
-    regency_id: state.value.regency_id,
-    district_id: state.value.district_id,
-    village_id: state.value.village_id,
-    subvillage_id: state.value.subvillage_id,
-    subvillage_name: state.value.subvillage_name
-  })
+  const formData = new FormData()
+  formData.append('name', state.value.name)
+  formData.append('nik', state.value.nik ?? '')
+  formData.append('phone', state.value.phone ?? '')
+  formData.append('address', state.value.address ?? '')
+  formData.append('note', state.value.note ?? '')
+  formData.append('user_area_id', state.value.user_area_id ?? '')
+
+  formData.append('is_stickered', state.value.is_stickered ? 1 : 0)
+  formData.append('sticker_photo', state.value.sticker_photo ?? '')
+  formData.append('received_aid_program', state.value.received_aid_program ?? '')
+
+  formData.append('regency_id', state.value.regency_id ?? '')
+  formData.append('district_id', state.value.district_id ?? '')
+  formData.append('village_id', state.value.village_id ?? '')
+  formData.append('subvillage_id', state.value.subvillage_id ?? '')
+  formData.append('subvillage_name', state.value.subvillage_name ?? '')
+  formData.append('_method', 'PUT')
+
+  submitLoading.value = true
+  api.post('v1/constituent/' + detailData.value.id,
+  // {
+  //   name: state.value.name,
+  //   nik: state.value.nik,
+  //   phone: state.value.phone,
+  //   address: state.value.address,
+  //   note: state.value.note,
+  //   user_area_id: state.value.user_area_id,
+
+    //   regency_id: state.value.regency_id,
+    //   district_id: state.value.district_id,
+    //   village_id: state.value.village_id,
+    //   subvillage_id: state.value.subvillage_id,
+    //   subvillage_name: state.value.subvillage_name
+    // }
+    formData
+  )
     .then(async (res) => {
       console.log('res', res)
       showNotification('Konstituen berhasil diperbarui', 'positive', 'check')
@@ -379,6 +469,47 @@ const onChangeAreaSelector = (payload) => {
   state.value.village_id = payload.village_id
   state.value.district_id = payload.district_id
   state.value.regency_id = payload.regency_id
+}
+
+/* CAMERA (capacitor/ionic) */
+const capturedImageUrl = ref(null)
+async function captureImage () {
+  // const check = await Camera.checkPermissions()
+  // console.log('check', check)
+
+  if (Platform.is.nativeMobile) {
+    try {
+      const request = await Camera.requestPermissions({
+        permissions: ['camera']
+      })
+      console.log('requestPermissions', JSON.stringify(request))
+    } catch (error) {
+      console.log('error requestPermissions', JSON.stringify(error))
+    }
+  }
+
+  try {
+    const image = await Camera.getPhoto({
+      quality: 100,
+      allowEditing: false,
+      saveToGallery: false,
+      source: 'CAMERA',
+      resultType: 'uri'
+    })
+
+    capturedImageUrl.value = image.webPath
+
+    const blob = await convertImagePathToBlob(image.webPath)
+    state.value.sticker_photo = blob
+  } catch (error) {
+    console.log('getPhoto error', JSON.stringify(error))
+  }
+}
+
+const convertImagePathToBlob = async (image) => {
+  const response = await fetch(image)
+  const blob = await response.blob()
+  return blob
 }
 
 </script>

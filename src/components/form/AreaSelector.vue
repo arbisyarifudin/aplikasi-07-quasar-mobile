@@ -68,7 +68,7 @@
 
 <script setup>
 
-import { ref, onMounted, watch } from 'vue'
+import { ref, onMounted, watch, computed } from 'vue'
 import { LocalStorage } from 'quasar'
 import { api } from 'src/boot/axios'
 
@@ -84,7 +84,21 @@ const $props = defineProps({
   errors: {
     type: Object,
     default: () => ({})
+  },
+  autoFetch: {
+    type: Boolean,
+    default: false
   }
+})
+
+const isNeedAutoFetch = computed(() => {
+  if (($props.mode === 'edit' || state.value.subvillage_id || state.value.subvillage_name) && $props.autoFetch) {
+    if (districtOptions.value.length > 0 && villageOptions.value.length > 0 && subvillageOptions.value.length > 0) {
+      return false
+    }
+    return true
+  }
+  return false
 })
 
 watch(
@@ -97,7 +111,7 @@ watch(
         return
       }
 
-      if ($props.mode === 'edit') {
+      if (isNeedAutoFetch.value) {
         await getRegency()
       }
 
@@ -161,7 +175,7 @@ const getRegency = async () => {
       value: item.id
     }))
 
-    if (state.value.regency_id && $props.mode === 'edit') {
+    if (state.value.regency_id && isNeedAutoFetch.value) {
       onRegencyChange(state.value.regency_id, false)
     }
   } catch (err) {
